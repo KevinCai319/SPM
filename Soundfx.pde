@@ -1,14 +1,18 @@
 public class Soundfx extends SoundManager{
 private int SoundID;
-Minim minim;
-AudioPlayer player;
 
 public Soundfx(int SoundID){
     this.SoundID = SoundID;
-    player = minim.loadFile("soundfx/"+SoundID+".mp3");
+    print(SoundID+".mp3");
+    player = getSound("/sfx/"+SoundID+".mp3");
+    player.setGain(80);
     player.play();
+    end();
 }
-public void stop(){
-  player.pause();
+public void end(){                                                                                                                       
+  player.setGain(-100);
 }
 }
+
+
+                                                           
