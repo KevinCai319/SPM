@@ -25,29 +25,7 @@ public AudioPlayer getSound(String m){
 }
 void lol (int levelID){
     String[]Levelreader = loadStrings(levelID +"LDATA"+".txt");
-    String Reader = "";
-    Boolean IsSolid;//[
-    Boolean IsDamage;//*
-    Boolean IsWall;//~
-    Boolean IsEnemy;//?
-    Boolean IsMoving;//=
-    Boolean hasTexture;//:
-    int texture;
-    Boolean HasProjectiles;//a
-    int EnemyType;
     for (int i = 0; i < Levelreader.length ; i++ ){
-      if(Levelreader[i] == "/"){
-        if(Reader != ""){
-        
-        
-        
-        }else{
-      
-        }
-      }else{
-      
-      
-      
-      }
+    
     }
   }
