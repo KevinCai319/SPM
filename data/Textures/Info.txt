@@ -1,0 +1,26 @@
+OK:
+First digit:Boolean IsSolid
+1:Solid
+2:Non-Solid
+//can ad more if needed!
+2nd digit:EnitityType (int)
+1:Enemy
+2:Block
+3:teleporter
+3rd digit:Movement: Boolean IsMovement
+1:yes
+2:no
+4th digit:(If its a block)
+1:damage
+2:NoDamage
+4th digit:(If It's an enemy)
+1:projectiles
+2:NoProjectiles
+//no 4th digit for teleporter as of now
+
+If has Projectiles:
+send ID of projectile, then ID of Enemy
+Else:
+//If its a block or something or anything else other than an enemy with projectiles, then just put the ID.
+
+//Note: If you want to, put a .txt file along with ur upload to explain what theactual texture is for.
