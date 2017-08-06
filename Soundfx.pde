@@ -14,4 +14,3 @@ public void end(){
   player.setGain(-100);
 }
 }
-
