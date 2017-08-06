@@ -38,7 +38,6 @@ public void render(int x, int y, int z, int scale){
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
 
-
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
