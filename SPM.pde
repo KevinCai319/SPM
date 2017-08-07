@@ -29,7 +29,7 @@ minim = new Minim(this);
 //GameAudio.play("pink floyed","A");
 eyeX = width/2;
 
-eyeY = height/2- scale*5;
+eyeY = height/2- scale*15;
 
 eyeZ = d;
 foucusX = width/2;
@@ -45,25 +45,26 @@ renderFrame();
 rotationTransition();
 }
 void renderFrame(){
-  if(IsLoaded == false){
+if(IsLoaded == false){
   load();
-  }
+}else{
 beginCamera();
 background(0);
 lights();
 editCam(0);
 camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
-ortho(-width/2, width/2, -height/2, height/2);
+ortho(-width/4, width/4, -height/4, height/4);
 if(IsLoaded ==false){
 }
 Renderscene();
 endCamera();
 }
+}
 public void load(){
   IBlock.clear();
 LoadedBlocks.clear();
-for (int m = -4 ; m < 5; m++){ 
-for(int i = -4; i< 5; i++){
+for (int m = -40 ; m < 41; m++){ 
+for(int i = -40; i< 41; i++){
 IBlock.add(new cube(0,(width/2)+scale*2*m,(height/2),scale*i*2));
 }
 }
@@ -93,7 +94,7 @@ void lol (int levelID){
   }
 void rotationTransition(){
 if(IsRotating == true && (!(ang%90 == 0))){
-ang+=1;
+ang+=2;
 if (ang%90 == 0){
 RotationState++;
 }
@@ -111,8 +112,8 @@ void UpdateAngle() {
   eyeZ = d*cos(radians(ang));
 }
 void keyPressed(){
-  if (keyCode == UP && IsRotating == false){
+  if (keyCode == ' ' && IsRotating == false){
     IsRotating = true;
-    ang+=1;
+    ang+=2;
   }
 }
