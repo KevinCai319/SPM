@@ -22,18 +22,18 @@ public void render(int scale){
   vertex( scale+x, -scale+y,  scale+z, 1, 0);
   vertex( scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y,  scale+z, 0, 1);
-  texture(m);
+
   vertex( scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y, -scale+z, 1, 0);
   vertex(-scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y, -scale+z, 0, 1);
 
-  texture(m);
+
   vertex(-scale+x,  scale+y,  scale+z, 0, 0);
   vertex( scale+x,  scale+y, scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
   vertex(-scale+x,  scale+y, -scale+z, 0, 1);
-  texture(m);
+
   vertex(-scale+x, -scale+y, -scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
