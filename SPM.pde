@@ -8,16 +8,20 @@ import ddf.minim.ugens.*;
 SoundManager GameAudio = new SoundManager();
 public int CameraState;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
+ArrayList<cube>IBlock = new ArrayList<cube>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer player;
 float ang = 0;
 int frames;
+boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
-float d = 400;
 int RotationState = 0;
-int scale = 40;
+int scale = 20;
+float d = 400;
 boolean IsRotating = false;
+ArrayList<Integer[]> LoadedBlocks = new ArrayList<Integer[]>();
+float foucusX,foucusY,foucusZ,postfoucusX,postfoucusY,postfoucusZ;
 void setup(){
 size(1200, 900, P3D);
 minim = new Minim(this);
@@ -25,35 +29,57 @@ minim = new Minim(this);
 //GameAudio.play("pink floyed","A");
 eyeX = width/2;
 
-eyeY = height/2; /*- scale*5;*/
+eyeY = height/2- scale*5;
 
 eyeZ = d;
+foucusX = width/2;
+foucusY = height/2;
+foucusZ = 0;
+postfoucusX = width/2;
+postfoucusY = height/2;
+postfoucusZ = 0;
 }
 void draw(){
 frames++;
 renderFrame();
 rotationTransition();
-
 }
 void renderFrame(){
+  if(IsLoaded == false){
+  load();
+  }
 beginCamera();
 background(0);
 lights();
-camera(eyeX,eyeY,eyeZ,width/2,height/2,0,0,1,0);
+editCam(0);
+camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
 ortho(-width/2, width/2, -height/2, height/2);
-cube a = new cube(0,(width/2),(height/2),0);
-a.LoadTextures();
-a.render(scale);
-cube b = new cube(0,(width/2),(height/2)-scale*2,0);
-b.LoadTextures();
-b.render(scale);
-cube c = new cube(0,(width/2)-scale*2,(height/2),0);
-c.LoadTextures();
-c.render(scale);
-cube d = new cube(0,(width/2),(height/2),scale*2);
-d.LoadTextures();
-d.render(scale);
+if(IsLoaded ==false){
+}
+Renderscene();
 endCamera();
+}
+public void load(){
+  IBlock.clear();
+LoadedBlocks.clear();
+for (int m = -4 ; m < 5; m++){ 
+for(int i = -4; i< 5; i++){
+IBlock.add(new cube(0,(width/2)+scale*2*m,(height/2),scale*i*2));
+}
+}
+IsLoaded = true;
+}
+public void editCam(float fraction){
+ UpdateAngle();
+  postfoucusX = foucusX*fraction+eyeX*(1-fraction);
+ postfoucusY = foucusY*fraction+eyeY*(1-fraction);
+ postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
+ 
+}
+public void Renderscene(){
+for (int i = 0; i < IBlock.size() ; i++){
+IBlock.get(i).render(scale);
+}
 }
 public AudioPlayer getSound(String m){
   player = minim.loadFile(m);
@@ -67,7 +93,10 @@ void lol (int levelID){
   }
 void rotationTransition(){
 if(IsRotating == true && (!(ang%90 == 0))){
-ang+=5;
+ang+=1;
+if (ang%90 == 0){
+RotationState++;
+}
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -80,13 +109,10 @@ void UpdateAngle() {
   }
   eyeX = (width/2)-d*(sin(radians(ang)));
   eyeZ = d*cos(radians(ang));
-  //println("Angle "+ang+": "+eyeX+" / "+eyeY+" / "+eyeZ);
 }
 void keyPressed(){
   if (keyCode == UP && IsRotating == false){
     IsRotating = true;
-    RotationState++;
-    RotationState %= 4;
-    ang+=5;
+    ang+=1;
   }
 }
