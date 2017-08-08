@@ -47,17 +47,18 @@ eyeX = width/2;
 eyeY = height/2- scale*15;
 
 eyeZ = d;
-foucusX = width/2;
-foucusY = height/2;
-foucusZ = 0;
-postfoucusX = width/2;
-postfoucusY = height/2;
-postfoucusZ = 0;
+foucusX = player.x;
+foucusY = player.y;
+foucusZ = player.z;
+postfoucusX = player.x;
+postfoucusY = player.y;
+postfoucusZ = player.z;
 }
 void draw(){
 frames++;
 renderFrame();
 rotationTransition();
+player.updatePlayer();
 }
 void renderFrame(){
 if(IsLoaded == false){
@@ -90,6 +91,7 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
+ println(foucusX);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -126,7 +128,7 @@ void UpdateAngle() {
   if (ang>=360){
     ang=0;
   }
-  eyeX = (width/2)-d*(sin(radians(ang)));
+  eyeX = (foucusX)-d*(sin(radians(ang)));
   eyeZ = d*cos(radians(ang));
 }
 void keyPressed(){

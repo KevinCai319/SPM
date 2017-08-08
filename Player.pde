@@ -6,12 +6,13 @@ public float Yvel;
 public float shiftZ;
 public float shiftX;
 private float x,y,z;
-public boolean IsJumping = false;
+public boolean isJumping = false;
 public float Damage;
 public Player(int health,int speed, float Damage){
   this.health = health;
   this.speed = speed;
   this.Damage = Damage;
+  isJumping = false;
   x = width/2;
   y = height/2;
   z = 0;
@@ -28,15 +29,18 @@ return y;
 public float getZ(){
 return z;
 }
-public void UpdatePlayer(){
-  if(KeyUp && IsJumping == false){           
+public void calculateShift(int ang){
+
+}
+public void updatePlayer(){
+  if(KeyUp && isJumping == false){           
     Yvel -= 0.1;
     if(Yvel > 0){
       Yvel *= -0.8333333;
     }else{
       Yvel *= 1.2;
     }
-    IsJumping = true;
+    isJumping = true;
   }
   Yvel *= 0.8;
   if (abs(Yvel) < 0.05){
@@ -76,7 +80,10 @@ public void UpdatePlayer(){
       FXvel = -8;
     }
   }    
-
+  y+=Yvel;
+  
+  x+=shiftX;
+  z+=shiftZ;
 }
 
 
