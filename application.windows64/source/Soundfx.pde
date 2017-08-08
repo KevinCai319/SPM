@@ -5,12 +5,12 @@ private int SoundID;
 public Soundfx(int SoundID){
     this.SoundID = SoundID;
     print(SoundID+".mp3");
-    player = getSound("/sfx/"+SoundID+".mp3");
-    player.setGain(80);
-    player.play();
+    audio = getSound("/sfx/"+SoundID+".mp3");
+    audio.setGain(80);
+    audio.play();
     end();
 }
 public void end(){                                                                                                                       
-  player.setGain(-100);
+  audio.setGain(-100);
 }
 }
