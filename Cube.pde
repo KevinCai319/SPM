@@ -10,7 +10,7 @@ this.x = x;
 this.y = y;
 this.z = z;
   textureMode(NORMAL);
-PImage m = loadImage("/Textures/"+ ID + ".png");
+m = loadImage("/Textures/"+ ID + ".png");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
 }

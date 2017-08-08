@@ -16,14 +16,17 @@ cx = -x;
 }
 public void LoadUpdate(){
 
-if(cx> x && cz < z){
+if(cx>= x && cz <= x){
 cz++;
 cx = -x;
 }else{
 cx++;
 }
-IBlock.add(new cube(0,(width/2)+scale*2*x,(height/2),scale*z*2));
-if(cx> x && cz > z){
+println(cz);
+if(cz<= x || cx<=x){
+IBlock.add(new cube(0,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+}
+if(cx> x && cz > x){
 IsLoaded = true;
 CurrentlyLoading =false;
 }

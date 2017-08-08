@@ -4,6 +4,7 @@ import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 import ddf.minim.signals.*;
 import ddf.minim.spi.*;
+import javax.swing.ImageIcon;
 import ddf.minim.ugens.*;
 SoundManager GameAudio = new SoundManager();
 public int CameraState;
@@ -20,6 +21,7 @@ int RotationState = 0;
 int scale = 20;
 boolean CurrentlyLoading = false;
 float d = 400;
+ImageIcon titlebaricon;
 boolean IsRotating = false;
 ArrayList<Integer[]> LoadedBlocks = new ArrayList<Integer[]>();
 float foucusX,foucusY,foucusZ,postfoucusX,postfoucusY,postfoucusZ;
@@ -32,6 +34,8 @@ size(1200, 900, P3D);
 minim = new Minim(this);
 GameAudio.play("pink floyd","A");
 //GameAudio.play("pink floyed","A");
+changeAppTitle("SPM//I like potatoes");
+titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
 
 eyeY = height/2- scale*15;
@@ -70,6 +74,7 @@ public void load(){
   if(CurrentlyLoading == false){
   CurrentlyLoading = true;
   load.StartLoad(5,5,5);
+  frame.setIconImage(titlebaricon.getImage());
   }else{
   load.LoadUpdate();
   }
@@ -120,4 +125,7 @@ void keyPressed(){
     IsRotating = true;
     ang+=2;
   }
+}
+void changeAppTitle(String title) {
+  surface.setTitle(title);
 }
