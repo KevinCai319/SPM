@@ -18,6 +18,7 @@ boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
 int RotationState = 0;
 int scale = 20;
+boolean CurrentlyLoading = false;
 float d = 400;
 boolean IsRotating = false;
 ArrayList<Integer[]> LoadedBlocks = new ArrayList<Integer[]>();
@@ -66,7 +67,8 @@ endCamera();
 }
 }
 public void load(){
-  if(IBlock.size() < 1){
+  if(CurrentlyLoading == false){
+  CurrentlyLoading = true;
   load.StartLoad(5,5,5);
   }else{
   load.LoadUpdate();
