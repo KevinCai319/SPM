@@ -8,11 +8,15 @@ import javax.swing.ImageIcon;
 import ddf.minim.ugens.*;
 SoundManager GameAudio = new SoundManager();
 public int CameraState;
+  boolean KeyUp = false;
+  boolean KeyRight = false;       
+  boolean KeyLeft = false;
+  boolean KeyDown = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
 String[] Levelreader;
 Minim minim;
-AudioPlayer player;
+AudioPlayer audio;
 float ang = 0;
 int frames;
 boolean IsLoaded = false;
@@ -28,8 +32,10 @@ float foucusX,foucusY,foucusZ,postfoucusX,postfoucusY,postfoucusZ;
 levelLoader load = new levelLoader();
 /*PImage icon = loadImage("icon.PNG");
 surface.setIcon(icon);*/
+Player player;
 void setup(){
-  IBlock.clear();
+player = new Player(100,4,2);
+IBlock.clear();
 size(1200, 900, P3D);
 minim = new Minim(this);
 GameAudio.play("pink floyd","A");
@@ -81,6 +87,9 @@ public void load(){
 }
 public void editCam(float fraction){
  UpdateAngle();
+ foucusX = player.getX();
+ foucusY = player.getY();
+ foucusZ = player.getZ();
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -92,8 +101,8 @@ IBlock.get(i).render(scale);
 }
 }
 public AudioPlayer getSound(String m){
-  player = minim.loadFile(m);
-  return player;
+  audio = minim.loadFile(m);
+  return audio;
 }
 void lol (int levelID){
     String[]Levelreader = loadStrings(levelID +"LDATA"+".txt");
@@ -121,9 +130,51 @@ void UpdateAngle() {
   eyeZ = d*cos(radians(ang));
 }
 void keyPressed(){
+   if(key == CODED)
+  {
+    if (keyCode == LEFT)
+    {
+      KeyLeft = true;
+    }
+    if(keyCode == RIGHT)
+    {
+      KeyRight = true; 
+    }
+    if (keyCode == UP)
+    {
+      KeyUp = true;
+    }
+    if(keyCode == DOWN)
+    {
+      KeyDown = true;
+    }
+    
+  }
   if (keyCode == ' ' && IsRotating == false){
     IsRotating = true;
     ang+=2;
+  }
+}
+void keyReleased(){
+   if(key == CODED)
+  {
+    if (keyCode == LEFT)
+    {
+      KeyLeft = false;
+    }
+    if(keyCode == RIGHT)
+    {
+      KeyRight = false; 
+    }
+    if (keyCode == UP)
+    {
+      KeyUp = false;
+    }
+    if(keyCode == DOWN)
+    {
+      KeyDown = false;
+    }
+    
   }
 }
 void changeAppTitle(String title) {
