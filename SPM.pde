@@ -22,10 +22,14 @@ float d = 400;
 boolean IsRotating = false;
 ArrayList<Integer[]> LoadedBlocks = new ArrayList<Integer[]>();
 float foucusX,foucusY,foucusZ,postfoucusX,postfoucusY,postfoucusZ;
+levelLoader load = new levelLoader();
+/*PImage icon = loadImage("icon.PNG");
+surface.setIcon(icon);*/
 void setup(){
+  IBlock.clear();
 size(1200, 900, P3D);
 minim = new Minim(this);
-//GameAudio.play("pink floyd","A");
+GameAudio.play("pink floyd","A");
 //GameAudio.play("pink floyed","A");
 eyeX = width/2;
 
@@ -50,6 +54,7 @@ if(IsLoaded == false){
 }else{
 beginCamera();
 background(0);
+noStroke();
 lights();
 editCam(0);
 camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
@@ -61,14 +66,11 @@ endCamera();
 }
 }
 public void load(){
-  IBlock.clear();
-LoadedBlocks.clear();
-for (int m = -40 ; m < 41; m++){ 
-for(int i = -40; i< 41; i++){
-IBlock.add(new cube(0,(width/2)+scale*2*m,(height/2),scale*i*2));
-}
-}
-IsLoaded = true;
+  if(IBlock.size() < 1){
+  load.StartLoad(5,5,5);
+  }else{
+  load.LoadUpdate();
+  }
 }
 public void editCam(float fraction){
  UpdateAngle();

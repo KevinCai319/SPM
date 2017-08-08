@@ -12,10 +12,6 @@ this.z = z;
   textureMode(NORMAL);
 PImage m = loadImage("/Textures/"+ ID + ".png");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
-if(LoadedBlocks.size() > 3){
-  println(LoadedBlocks.get(3));
-  println(LoadedBlocks.get(2));
-}
 int ID = LoadedBlocks.size();
 }
 public void render(int scale){
@@ -27,7 +23,7 @@ public void render(int scale){
   vertex( scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y,  scale+z, 0, 1);
   }
-  if(((RotationState == 2)||(IsRotating == true &&RotationState == 1))&&!(LoadedBlocks.contains(new Integer[] {this.x,this.y,this.z-scale*2}))){
+  if(((RotationState == 2)||(IsRotating == true &&RotationState == 1))){
   vertex( scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y, -scale+z, 1, 0);
   vertex(-scale+x,  scale+y, -scale+z, 1, 1);
