@@ -3,9 +3,10 @@ PImage m;
 int x;
 int y;
 boolean IsRender = true;
+boolean IsTint = false;
 int ID;
 int z;
-int dist = 3;
+int dist = 5;
 public cube(int BlockID,int x, int y, int z){
 ID = BlockID;
 this.x = x;
@@ -17,6 +18,7 @@ LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
 }
 public void render(int scale){
+  IsTint = false;
    IsRender = false;
   if(player.IsPerpendicular ==true){
     if(abs(player.x-x) < scale*dist){
@@ -28,6 +30,7 @@ public void render(int scale){
     }else{
     if(IsRotating){
       IsRender = true;
+      IsTint = true;
     }
     }
     
@@ -35,6 +38,11 @@ public void render(int scale){
   if (IsRender){
     println(abs((player.slope*x)+z+player.intercept)/player.slope);
  beginShape(QUADS);
+ if(IsTint){
+ tint(255,150);
+ }else{
+   tint(255,255);
+ }
   texture(m);
   vertex(-scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 0);
