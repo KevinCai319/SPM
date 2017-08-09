@@ -17,7 +17,7 @@ ArrayList<cube>IBlock = new ArrayList<cube>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 0;
+float ang = 30;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -75,6 +75,7 @@ if(IsLoaded ==false){
 }
 Renderscene();
 endCamera();
+player.calculateShift(ang);
 }
 }
 public void load(){
@@ -91,7 +92,7 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
- println(foucusX);
+ //println(foucusX);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -114,7 +115,7 @@ void lol (int levelID){
   }
 void rotationTransition(){
 if(IsRotating == true && (!(ang%90 == 0))){
-ang+=2;
+ang+=1;
 if (ang%90 == 0){
 RotationState++;
 }
@@ -129,7 +130,7 @@ void UpdateAngle() {
     ang=0;
   }
   eyeX = (foucusX)-d*(sin(radians(ang)));
-  eyeZ = d*cos(radians(ang));
+  eyeZ = (foucusZ)+d*cos(radians(ang));
 }
 void keyPressed(){
    if(key == CODED)

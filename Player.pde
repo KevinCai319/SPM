@@ -8,6 +8,9 @@ public float shiftX;
 private float x,y,z;
 public boolean isJumping = false;
 public float Damage;
+boolean IsPerpendicular = false;
+float slope;
+float intercept;
 public Player(int health,int speed, float Damage){
   this.health = health;
   this.speed = speed;
@@ -16,6 +19,7 @@ public Player(int health,int speed, float Damage){
   x = width/2;
   y = height/2;
   z = 0;
+  shiftX = 1;
 }
 public void RenderPlayer(){
 
@@ -29,18 +33,30 @@ return y;
 public float getZ(){
 return z;
 }
-public void calculateShift(int ang){
-
+public void calculateShift(float ang){
+shiftZ = sin(radians(ang));
+shiftX = cos(radians(ang));
+ player.genEquation();
+}
+public void genEquation(){
+if (abs(shiftX) > 0.001){
+  IsPerpendicular = false;
+slope = shiftZ/shiftX;
+}else{
+IsPerpendicular = true;
+slope = 0;
+}
+intercept = z-x*slope;
 }
 public void updatePlayer(){
-  if(KeyUp && isJumping == false){           
-    Yvel -= 0.1;
-    if(Yvel > 0){
+  /*if(KeyUp && isJumping == false){           
+    Yvel = -200;
+    /*if(Yvel > 0){
       Yvel *= -0.8333333;
     }else{
       Yvel *= 1.2;
-    }
-    isJumping = true;
+    }*/
+  /*  isJumping = true;
   }
   Yvel *= 0.8;
   if (abs(Yvel) < 0.05){
@@ -52,7 +68,7 @@ public void updatePlayer(){
     }else{
       Yvel = -8;
     }
-  }
+  }*/
   if(KeyLeft){
     FXvel -= 0.1;
     if(FXvel > 0){
@@ -82,8 +98,8 @@ public void updatePlayer(){
   }    
   y+=Yvel;
   
-  x+=shiftX;
-  z+=shiftZ;
+  x+=shiftX*FXvel;
+  z+=shiftZ*FXvel;
 }
 
 

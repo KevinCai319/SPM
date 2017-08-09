@@ -2,8 +2,10 @@ public class cube{
 PImage m;
 int x;
 int y;
+boolean IsRender = true;
 int ID;
 int z;
+int dist = 3;
 public cube(int BlockID,int x, int y, int z){
 ID = BlockID;
 this.x = x;
@@ -15,20 +17,33 @@ LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
 }
 public void render(int scale){
+   IsRender = false;
+  if(player.IsPerpendicular ==true){
+    if(abs(player.x-x) < scale*dist){
+    IsRender = true;
+    }
+  }else{
+    if (((z-scale*dist <player.intercept+player.slope*x )&&(player.intercept+player.slope*x< z+scale*dist))){
+    IsRender = true;
+    }else{
+    if(IsRotating){
+      IsRender = true;
+    }
+    }
+    
+  }
+  if (IsRender){
+    println(abs((player.slope*x)+z+player.intercept)/player.slope);
  beginShape(QUADS);
   texture(m);
-  if(((RotationState == 0)||(IsRotating == true &&((RotationState == 3)||(RotationState == 4))))){
   vertex(-scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 0);
   vertex( scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y,  scale+z, 0, 1);
-  }
-  if(((RotationState == 2)||(IsRotating == true &&RotationState == 1))){
   vertex( scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y, -scale+z, 1, 0);
   vertex(-scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y, -scale+z, 0, 1);
-  }
   //top face. always show
   /*vertex(-scale+x,  scale+y,  scale+z, 0, 0);
   vertex( scale+x,  scale+y, scale+z, 1, 0);
@@ -39,19 +54,16 @@ public void render(int scale){
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
-  if(((RotationState == 3)||(IsRotating == true &&RotationState == 2))){
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y,  scale+z, 0, 1);
-  }
-  if(((RotationState == 1)||(IsRotating == true &&RotationState == 0))){
   vertex(-scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y,  scale+z, 1, 0);
   vertex(-scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y, -scale+z, 0, 1);
-  }
   endShape();
+  }
 }
 
 }
