@@ -92,7 +92,6 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
- //println(foucusX);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
