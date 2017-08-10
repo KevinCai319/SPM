@@ -12,12 +12,14 @@ public int CameraState;
   boolean KeyRight = false;       
   boolean KeyLeft = false;
   boolean KeyDown = false;
+  boolean Keyspace = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
+ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 0;
+float ang = 30;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -75,6 +77,7 @@ if(IsLoaded ==false){
 }
 Renderscene();
 endCamera();
+player.calculateShift(ang);
 }
 }
 public void load(){
@@ -91,7 +94,7 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
- println(foucusX);
+ directionalLight(255,255,255,foucusX,foucusY,foucusZ);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -101,6 +104,7 @@ public void Renderscene(){
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
   audio = minim.loadFile(m);
@@ -113,11 +117,8 @@ void lol (int levelID){
     }
   }
 void rotationTransition(){
-if(IsRotating == true && (!(ang%90 == 0))){
-ang+=2;
-if (ang%90 == 0){
-RotationState++;
-}
+if(IsRotating == true && Keyspace == true){
+ang+=1;
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -129,7 +130,7 @@ void UpdateAngle() {
     ang=0;
   }
   eyeX = (foucusX)-d*(sin(radians(ang)));
-  eyeZ = d*cos(radians(ang));
+  eyeZ = (foucusZ)+d*cos(radians(ang));
 }
 void keyPressed(){
    if(key == CODED)
@@ -153,6 +154,7 @@ void keyPressed(){
     
   }
   if (keyCode == ' ' && IsRotating == false){
+    Keyspace = true;
     IsRotating = true;
     ang+=2;
   }
@@ -177,6 +179,10 @@ void keyReleased(){
       KeyDown = false;
     }
     
+  }
+  if (keyCode == ' '){
+    Keyspace = false;
+    IsRotating = false;
   }
 }
 void changeAppTitle(String title) {

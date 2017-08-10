@@ -36,12 +36,14 @@ public int CameraState;
   boolean KeyRight = false;       
   boolean KeyLeft = false;
   boolean KeyDown = false;
+  boolean Keyspace = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
+ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 0;
+float ang = 30;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -99,6 +101,7 @@ if(IsLoaded ==false){
 }
 Renderscene();
 endCamera();
+player.calculateShift(ang);
 }
 }
 public void load(){
@@ -115,7 +118,7 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
- println(foucusX);
+ directionalLight(255,255,255,foucusX,foucusY,foucusZ);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -125,6 +128,7 @@ public void Renderscene(){
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
   audio = minim.loadFile(m);
@@ -137,11 +141,8 @@ public void lol (int levelID){
     }
   }
 public void rotationTransition(){
-if(IsRotating == true && (!(ang%90 == 0))){
-ang+=2;
-if (ang%90 == 0){
-RotationState++;
-}
+if(IsRotating == true && Keyspace == true){
+ang+=1;
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -153,7 +154,7 @@ public void UpdateAngle() {
     ang=0;
   }
   eyeX = (foucusX)-d*(sin(radians(ang)));
-  eyeZ = d*cos(radians(ang));
+  eyeZ = (foucusZ)+d*cos(radians(ang));
 }
 public void keyPressed(){
    if(key == CODED)
@@ -177,6 +178,7 @@ public void keyPressed(){
     
   }
   if (keyCode == ' ' && IsRotating == false){
+    Keyspace = true;
     IsRotating = true;
     ang+=2;
   }
@@ -201,6 +203,10 @@ public void keyReleased(){
       KeyDown = false;
     }
     
+  }
+  if (keyCode == ' '){
+    Keyspace = false;
+    IsRotating = false;
   }
 }
 public void changeAppTitle(String title) {
@@ -230,8 +236,11 @@ public class cube{
 PImage m;
 int x;
 int y;
+boolean IsRender = true;
+boolean IsTint = false;
 int ID;
 int z;
+int dist = scale*2;
 public cube(int BlockID,int x, int y, int z){
 ID = BlockID;
 this.x = x;
@@ -243,20 +252,34 @@ LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
 }
 public void render(int scale){
+  IsTint = false;
+   IsRender = false;
+    if (GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist){
+    IsRender = true;
+    }else{
+    if(IsRotating){
+      IsRender = true;
+      IsTint = true;
+    }
+    }
+    
+  if (IsRender){
+    println(abs((player.slope*x)+z+player.intercept)/player.slope);
  beginShape(QUADS);
+ if(IsTint){
+ tint(50);
+ }else{
+   tint(255,255);
+ }
   texture(m);
-  if(((RotationState == 0)||(IsRotating == true &&((RotationState == 3)||(RotationState == 4))))){
   vertex(-scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 0);
   vertex( scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y,  scale+z, 0, 1);
-  }
-  if(((RotationState == 2)||(IsRotating == true &&RotationState == 1))){
   vertex( scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y, -scale+z, 1, 0);
   vertex(-scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y, -scale+z, 0, 1);
-  }
   //top face. always show
   /*vertex(-scale+x,  scale+y,  scale+z, 0, 0);
   vertex( scale+x,  scale+y, scale+z, 1, 0);
@@ -267,21 +290,70 @@ public void render(int scale){
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
-  if(((RotationState == 3)||(IsRotating == true &&RotationState == 2))){
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y,  scale+z, 0, 1);
-  }
-  if(((RotationState == 1)||(IsRotating == true &&RotationState == 0))){
   vertex(-scale+x, -scale+y, -scale+z, 0, 0);
   vertex(-scale+x, -scale+y,  scale+z, 1, 0);
   vertex(-scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y, -scale+z, 0, 1);
-  }
   endShape();
+  }
 }
-
+public void IsIntersecting(){
+  float dist = GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
+  if(dist*dist < scale*scale*2){//lies on the line of intersection
+    crossSection();
+  }
+}
+public void crossSection(){
+  PShape cubeobj; 
+  ArrayList<Float[]> m = new ArrayList<Float[]>();
+  PVector a = new PVector(-scale+x, -scale+z);
+  PVector b = new PVector( scale+x, -scale+z);
+  PVector c = new PVector( scale+x, scale+z);
+  PVector d = new PVector(-scale+x, scale+z);
+m.add(compareIntersection(a,b,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+m.add(compareIntersection(b,c,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+m.add(compareIntersection(c,d,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+m.add(compareIntersection(d,a,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+cubeobj = createShape();
+cubeobj.beginShape(); 
+for(int i = 0; i < m.size(); i++){
+if(m.get(i).length > 1){
+cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
+}
+}
+}
+public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
+ int IntersectingState = 0; //no collison
+PVector E = new PVector (B.x-A.x,B.y-A.y);
+PVector F = new PVector (D.x-C.x, D.y-C.y);
+PVector P  = new PVector( -E.y, E.x );
+PVector M = new PVector(A.x-C.x,A.y-C.y);
+if(F.x*P.x+F.y*P.y == 0){
+IntersectingState = 1; //parralllel
+return new Float[] {PApplet.parseFloat(IntersectingState)};
+}else{
+float h = ( M.x*P.x+M.y*P.y ) / (F.x*P.x+F.y*P.y);
+if(h >0.05f && h < 0.95f){
+ IntersectingState = 2;
+}
+return new Float[] {PApplet.parseFloat(IntersectingState),C.x+F.x*h,C.y+F.y*h};
+}
+}
+public float GetDistance(float x, float y, float x1, float y1, float x2, float y2) {
+    float A = x - x1;
+    float B = y - y1;
+    float C = x2 - x1;
+    float D = y2 - y1;
+    float E = -D;
+    float F = C;
+    float dot = A * E + B * F;
+    float len_sq = E * E + F * F;
+    return dot* dot/ len_sq;
+  }
 }
 public class DamageBlock extends cube{
 
@@ -342,14 +414,20 @@ public float shiftX;
 private float x,y,z;
 public boolean isJumping = false;
 public float Damage;
+private cube mCube;
+boolean IsPerpendicular = false;
+float slope;
+float intercept;
 public Player(int health,int speed, float Damage){
   this.health = health;
   this.speed = speed;
   this.Damage = Damage;
   isJumping = false;
   x = width/2;
-  y = height/2;
+  y = height/2- scale*3/2;
   z = 0;
+  mCube = new cube(0,PApplet.parseInt(x),PApplet.parseInt(y),PApplet.parseInt(z));
+  shiftX = 1;
 }
 public void RenderPlayer(){
 
@@ -363,21 +441,34 @@ return y;
 public float getZ(){
 return z;
 }
-public void calculateShift(int ang){
-
+public void calculateShift(float ang){
+shiftZ = sin(radians(ang));
+shiftX = cos(radians(ang));
+ player.genEquation();
+}
+public void genEquation(){
+if (abs(shiftX) > 0.001f){
+  IsPerpendicular = false;
+slope = shiftZ/shiftX;
+}else{
+IsPerpendicular = true;
+slope = 0;
+}
+intercept = z-x*slope;
 }
 public void updatePlayer(){
-  if(KeyUp && isJumping == false){           
-    Yvel -= 0.1f;
-    if(Yvel > 0){
-      Yvel *= -0.8333333f;
+  if(IsRotating == false){
+  /*if(KeyUp && isJumping == false){           
+    Yvel = -200;
+    /*if(Yvel > 0){
+      Yvel *= -0.8333333;
     }else{
-      Yvel *= 1.2f;
-    }
-    isJumping = true;
+      Yvel *= 1.2;
+    }*/
+  /*  isJumping = true;
   }
-  Yvel *= 0.8f;
-  if (abs(Yvel) < 0.05f){
+  Yvel *= 0.8;
+  if (abs(Yvel) < 0.05){
     Yvel = 0;
   }
   if(abs(Yvel) > 8){
@@ -386,9 +477,9 @@ public void updatePlayer(){
     }else{
       Yvel = -8;
     }
-  }
+  }*/
   if(KeyLeft){
-    FXvel -= 0.1f;
+    FXvel -= 0.07f;
     if(FXvel > 0){
       FXvel *= -0.8f;
     }else{
@@ -396,7 +487,7 @@ public void updatePlayer(){
     }
   }
   if(KeyRight){
-    FXvel += 0.1f;
+    FXvel += 0.07f;
     if(FXvel > 0){
       FXvel *= 1.2f;
     }else{
@@ -407,17 +498,23 @@ public void updatePlayer(){
   if (abs(FXvel) < 0.01f){
     FXvel = 0;
   }
-  if(abs(FXvel) > 8){
+  if(abs(FXvel) > 5){
     if(FXvel > 0){
-      FXvel =8;
+      FXvel =5;
     }else{
-      FXvel = -8;
+      FXvel = -5;
     }
   }    
   y+=Yvel;
   
-  x+=shiftX;
-  z+=shiftZ;
+  x+=shiftX*FXvel;
+  z+=shiftZ*FXvel;
+  mCube.x = PApplet.parseInt(x);
+  mCube.y = PApplet.parseInt(y);
+  mCube.z = PApplet.parseInt(z);
+  }else{
+  FXvel = 0;
+  }
 }
 
 
@@ -486,6 +583,16 @@ public Soundfx(int SoundID){
 }
 public void end(){                                                                                                                       
   audio.setGain(-100);
+}
+}
+public class flatObj{
+PShape m;
+float FxT;
+float yT;
+float FxB;
+float yB;
+public flatObj(float fx, float y, float fb, float yb){
+  
 }
 }
   public void settings() { 
