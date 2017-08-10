@@ -24,7 +24,7 @@ cx++;
 }
 println(cz);
 if(cz<= x || cx<=x){
-IBlock.add(new cube(0,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+IBlock.add(new cube(int(random(1,2)),(width/2)+scale*2*cx,(height/2),scale*cz*2));
 }
 if(cx> x && cz > x){
 IsLoaded = true;

@@ -2,6 +2,7 @@ public class Player{
 public int health;
 public int speed;
 public float FXvel;
+public float FXpos;
 public float Yvel;
 public float shiftZ;
 public float shiftX;
@@ -103,11 +104,13 @@ public void updatePlayer(){
   
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
+  FXpos+=FXvel;
   mCube.x = int(x);
   mCube.y = int(y);
   mCube.z = int(z);
   }else{
   FXvel = 0;
+  FXpos = 0;
   }
 }
 

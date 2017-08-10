@@ -13,7 +13,7 @@ this.x = x;
 this.y = y;
 this.z = z;
   textureMode(NORMAL);
-m = loadImage("/Textures/"+ ID + ".png");
+m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
 }
@@ -74,7 +74,8 @@ public void IsIntersecting(){
   }
 }
 public void crossSection(){
-  PShape cubeobj; 
+  PShape cubeobj;
+  float[]dist = new float[6];
   ArrayList<Float[]> m = new ArrayList<Float[]>();
   PVector a = new PVector(-scale+x, -scale+z);
   PVector b = new PVector( scale+x, -scale+z);
@@ -89,8 +90,10 @@ cubeobj.beginShape();
 for(int i = 0; i < m.size(); i++){
 if(m.get(i).length > 1){
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
+dist[i] = GetDistance(m.get(i)[1],m.get(i)[2],player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
 }
 }
+flatObj k = new flatObj(dist[0],-scale+y,dist[1],scale+y,cubeobj);
 }
 public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
  int IntersectingState = 0; //no collison
