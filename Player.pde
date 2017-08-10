@@ -8,6 +8,7 @@ public float shiftX;
 private float x,y,z;
 public boolean isJumping = false;
 public float Damage;
+private cube mCube;
 boolean IsPerpendicular = false;
 float slope;
 float intercept;
@@ -17,8 +18,9 @@ public Player(int health,int speed, float Damage){
   this.Damage = Damage;
   isJumping = false;
   x = width/2;
-  y = height/2;
+  y = height/2- scale*3/2;
   z = 0;
+  mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
 }
 public void RenderPlayer(){
@@ -49,6 +51,7 @@ slope = 0;
 intercept = z-x*slope;
 }
 public void updatePlayer(){
+  if(IsRotating == false){
   /*if(KeyUp && isJumping == false){           
     Yvel = -200;
     /*if(Yvel > 0){
@@ -70,7 +73,7 @@ public void updatePlayer(){
     }
   }*/
   if(KeyLeft){
-    FXvel -= 0.1;
+    FXvel -= 0.07;
     if(FXvel > 0){
       FXvel *= -0.8;
     }else{
@@ -78,7 +81,7 @@ public void updatePlayer(){
     }
   }
   if(KeyRight){
-    FXvel += 0.1;
+    FXvel += 0.07;
     if(FXvel > 0){
       FXvel *= 1.2;
     }else{
@@ -89,17 +92,23 @@ public void updatePlayer(){
   if (abs(FXvel) < 0.01){
     FXvel = 0;
   }
-  if(abs(FXvel) > 8){
+  if(abs(FXvel) > 5){
     if(FXvel > 0){
-      FXvel =8;
+      FXvel =5;
     }else{
-      FXvel = -8;
+      FXvel = -5;
     }
   }    
   y+=Yvel;
   
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
+  mCube.x = int(x);
+  mCube.y = int(y);
+  mCube.z = int(z);
+  }else{
+  FXvel = 0;
+  }
 }
 
 

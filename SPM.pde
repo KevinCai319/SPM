@@ -12,8 +12,10 @@ public int CameraState;
   boolean KeyRight = false;       
   boolean KeyLeft = false;
   boolean KeyDown = false;
+  boolean Keyspace = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
+ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
@@ -92,6 +94,7 @@ public void editCam(float fraction){
  foucusX = player.getX();
  foucusY = player.getY();
  foucusZ = player.getZ();
+ directionalLight(255,255,255,foucusX,foucusY,foucusZ);
   postfoucusX = foucusX*fraction+eyeX*(1-fraction);
  postfoucusY = foucusY*fraction+eyeY*(1-fraction);
  postfoucusZ = foucusZ*fraction+eyeZ*(1-fraction);
@@ -101,6 +104,7 @@ public void Renderscene(){
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
   audio = minim.loadFile(m);
@@ -113,11 +117,8 @@ void lol (int levelID){
     }
   }
 void rotationTransition(){
-if(IsRotating == true && (!(ang%90 == 0))){
+if(IsRotating == true && Keyspace == true){
 ang+=1;
-if (ang%90 == 0){
-RotationState++;
-}
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -153,6 +154,7 @@ void keyPressed(){
     
   }
   if (keyCode == ' ' && IsRotating == false){
+    Keyspace = true;
     IsRotating = true;
     ang+=2;
   }
@@ -177,6 +179,10 @@ void keyReleased(){
       KeyDown = false;
     }
     
+  }
+  if (keyCode == ' '){
+    Keyspace = false;
+    IsRotating = false;
   }
 }
 void changeAppTitle(String title) {
