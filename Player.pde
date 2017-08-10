@@ -53,26 +53,8 @@ intercept = z-x*slope;
 }
 public void updatePlayer(){
   if(IsRotating == false){
-  /*if(KeyUp && isJumping == false){           
-    Yvel = -200;
-    /*if(Yvel > 0){
-      Yvel *= -0.8333333;
-    }else{
-      Yvel *= 1.2;
-    }*/
-  /*  isJumping = true;
+  if (KeyUp){
   }
-  Yvel *= 0.8;
-  if (abs(Yvel) < 0.05){
-    Yvel = 0;
-  }
-  if(abs(Yvel) > 8){
-    if(Yvel > 7){
-      Yvel = 8;
-    }else{
-      Yvel = -8;
-    }
-  }*/
   if(KeyLeft){
     FXvel -= 0.07;
     if(FXvel > 0){

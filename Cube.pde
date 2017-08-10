@@ -93,7 +93,7 @@ cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
 dist[i] = GetDistance(m.get(i)[1],m.get(i)[2],player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
 }
 }
-flatObj k = new flatObj(dist[0],-scale+y,dist[1],scale+y,cubeobj);
+//flatObj k = new flatObj(dist[0],-scale+y,,scale+y,cubeobj);
 }
 public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
  int IntersectingState = 0; //no collison
