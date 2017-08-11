@@ -96,7 +96,6 @@ if(m.get(i).length > 1){
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
 j.add(m.get(i)[1]);
 j.add(m.get(i)[2]);
-println(m.get(i)[1],m.get(i)[2],BID,player.x,player.z);
 }
 }
 
@@ -115,6 +114,8 @@ if( k > 1){
 }
 public Float[] compareIntersection(PVector A, PVector B){
   float eq = 0;
+  float x;
+  float z;
   Float[] res = new Float[] {0.0};
   float IntersectionState = 0;
   if(A.y == B.y &&B.y == player.z){
@@ -124,7 +125,9 @@ public Float[] compareIntersection(PVector A, PVector B){
    IntersectionState =3;
   }else{
     if(player.shiftX == 0){
-    
+      IntersectionState = 4;
+      if(player.x > min(A.x,B.x)&& player.x < max(A.x,B.x)){
+      }
     }else{
         if(player.shiftZ == 0){
         
@@ -135,7 +138,7 @@ public Float[] compareIntersection(PVector A, PVector B){
     
     }
   }
-  }
+  
   
   return res;
 }

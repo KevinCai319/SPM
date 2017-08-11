@@ -39,10 +39,11 @@ void setup(){
 player = new Player(100,4,2);
 IBlock.clear();
 size(1200, 900, P3D);
+surface.setResizable(true);
 minim = new Minim(this);
-GameAudio.play("pink floyd","A");
+//GameAudio.play("pink floyd","A");
 //GameAudio.play("pink floyed","A");
-changeAppTitle("SPM//I like potatoes");
+changeAppTitle("SPM");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
 textureMode(NORMAL);
@@ -110,6 +111,7 @@ public void Renderscene(){
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+println(player.x);
 player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
