@@ -45,7 +45,7 @@ GameAudio.play("pink floyd","A");
 changeAppTitle("SPM//I like potatoes");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
-
+textureMode(NORMAL);
 eyeY = height/2- scale*15;
 
 eyeZ = d;
@@ -73,8 +73,6 @@ lights();
 editCam(0);
 camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
 ortho(-width/4, width/4, -height/4, height/4);
-if(IsLoaded ==false){
-}
 Renderscene();
 endCamera();
 player.calculateShift(ang);
@@ -83,10 +81,14 @@ player.calculateShift(ang);
 public void load(){
   if(CurrentlyLoading == false){
   CurrentlyLoading = true;
-  load.StartLoad(5,5,5);
+  C2Dplane.clear();
+  IBlock.clear();
+  load.StartLoad(50,50,50);
   frame.setIconImage(titlebaricon.getImage());
   }else{
+  for(int i = 0; i < 200 ; i++){
   load.LoadUpdate();
+  }
   }
 }
 public void editCam(float fraction){
@@ -101,8 +103,10 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
+  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
+IBlock.get(i).IsIntersecting();
 }
 player.mCube.render(scale/2);
 }

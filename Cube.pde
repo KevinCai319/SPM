@@ -12,7 +12,6 @@ ID = BlockID;
 this.x = x;
 this.y = y;
 this.z = z;
-  textureMode(NORMAL);
 m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 int ID = LoadedBlocks.size();
@@ -20,17 +19,16 @@ int ID = LoadedBlocks.size();
 public void render(int scale){
   IsTint = false;
    IsRender = false;
-    if (GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist){
+    if (GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist){
     IsRender = true;
     }else{
-    if(IsRotating){
+    if(IsRotating&& GetDist(x,z,player.x,player.z)<scale*50){
       IsRender = true;
       IsTint = true;
     }
     }
     
   if (IsRender){
-    println(abs((player.slope*x)+z+player.intercept)/player.slope);
  beginShape(QUADS);
  if(IsTint){
  tint(50);
@@ -68,14 +66,13 @@ public void render(int scale){
   }
 }
 public void IsIntersecting(){
-  float dist = GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
-  if(dist*dist < scale*scale*2){//lies on the line of intersection
+  float disth = GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
+  if(disth*disth < scale*scale*2){//lies on the line of intersection
     crossSection();
   }
 }
 public void crossSection(){
   PShape cubeobj;
-  float[]dist = new float[6];
   ArrayList<Float[]> m = new ArrayList<Float[]>();
   PVector a = new PVector(-scale+x, -scale+z);
   PVector b = new PVector( scale+x, -scale+z);
@@ -90,10 +87,9 @@ cubeobj.beginShape();
 for(int i = 0; i < m.size(); i++){
 if(m.get(i).length > 1){
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
-dist[i] = GetDistance(m.get(i)[1],m.get(i)[2],player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
 }
 }
-//flatObj k = new flatObj(dist[0],-scale+y,,scale+y,cubeobj);
+C2Dplane.add(new flatObj((x-player.x)/player.shiftX,float(-scale+y),(z-player.z)/player.shiftZ,scale+y,cubeobj));
 }
 public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
  int IntersectingState = 0; //no collison
@@ -123,4 +119,7 @@ public float GetDistance(float x, float y, float x1, float y1, float x2, float y
     float len_sq = E * E + F * F;
     return dot* dot/ len_sq;
   }
+public float GetDist(float x, float y, float x1,float y1){
+  return sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
+}
 }
