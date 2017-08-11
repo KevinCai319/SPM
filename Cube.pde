@@ -68,8 +68,10 @@ public void render(int scale){
   }
 }
 public void IsIntersecting(){
+  if(BID != 1){
   if(GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist){//lies on the line of intersection
     crossSection();
+  }
   }
 }
 public void crossSection(){
@@ -92,14 +94,22 @@ for(int i = 0; i < m.size(); i++){
 if(m.get(i).length > 1){
   k++;
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
-println(m.get(i)[1]+"/"+m.get(i)[2]+"/"+BID + "/" + player.x + "/" +player.z);
 j.add(m.get(i)[1]);
 j.add(m.get(i)[2]);
 }
 }
 
 if( k > 1){
-  //C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.x)/player.shiftX,scale+y,cubeobj));
+  println(player.shiftX + "/" +player.shiftZ);
+  if(player.shiftZ == 0){
+  C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z),scale+y,cubeobj));
+  }else{
+   if(player.shiftX == 0){
+   C2Dplane.add(new flatObj((j.get(0)-player.x),float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
+   }else{
+     C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
+   }
+  }
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){
