@@ -24,10 +24,14 @@ cx++;
 }
 //println(cx);
 if(cz<= x || cx<=x){
-  if (abs(cz) > 2){
-IBlock.add(new cube(4,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+  if (cz > 2){
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2),scale*cz*2));
   }else{
-  IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+    if (cx > 2){
+  IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+    }else{
+      IBlock.add(new cube(4,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+    }
   }
 }
 if(cx> x && cz > x){

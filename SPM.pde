@@ -87,7 +87,7 @@ public void load(){
   load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
-  for(int i = 0; i < 200 ; i++){
+  for(int i = 0; i < 200 && IsLoaded == false; i++){
     if(!(load.cx > load.x && load.cz > load.x)){
         load.LoadUpdate();
     }
@@ -111,7 +111,7 @@ public void Renderscene(){
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
-println(player.x);
+//println(player.x);
 player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
