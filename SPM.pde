@@ -19,7 +19,7 @@ ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 30;
+float ang = 0;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -83,12 +83,15 @@ public void load(){
   CurrentlyLoading = true;
   C2Dplane.clear();
   IBlock.clear();
-  load.StartLoad(50,50,50);
+  load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
   for(int i = 0; i < 200 ; i++){
-  load.LoadUpdate();
+    if(!(load.cx > load.x && load.cz > load.x)){
+        load.LoadUpdate();
+    }
   }
+  //println(load.z);
   }
 }
 public void editCam(float fraction){
@@ -103,10 +106,8 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
-  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
-IBlock.get(i).IsIntersecting();
 }
 player.mCube.render(scale/2);
 }

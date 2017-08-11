@@ -5,6 +5,6 @@ float yT;
 float FxB;
 float yB;
 public flatObj(float fx, float y, float fb, float yb,PShape m){
-  println(fx+"/" + y + "/" + fb);
+  println(fx+"/" + y + "/" + fb + "/" + yb);
 }
 }

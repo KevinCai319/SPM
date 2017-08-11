@@ -5,6 +5,7 @@ int y;
 boolean IsRender = true;
 boolean IsTint = false;
 int ID;
+int BID;
 int z;
 int dist = scale*2;
 public cube(int BlockID,int x, int y, int z){
@@ -14,7 +15,7 @@ this.y = y;
 this.z = z;
 m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
-int ID = LoadedBlocks.size();
+BID = LoadedBlocks.size();
 }
 public void render(int scale){
   IsTint = false;
@@ -29,6 +30,7 @@ public void render(int scale){
     }
     
   if (IsRender){
+  IsIntersecting();
  beginShape(QUADS);
  if(IsTint){
  tint(50);
@@ -66,47 +68,69 @@ public void render(int scale){
   }
 }
 public void IsIntersecting(){
-  float disth = GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
-  if(disth*disth < scale*scale*2){//lies on the line of intersection
+  if(GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist){//lies on the line of intersection
     crossSection();
   }
 }
 public void crossSection(){
   PShape cubeobj;
+  int k =0;
   ArrayList<Float[]> m = new ArrayList<Float[]>();
+   ArrayList<Float> j = new ArrayList<Float>();
   PVector a = new PVector(-scale+x, -scale+z);
   PVector b = new PVector( scale+x, -scale+z);
   PVector c = new PVector( scale+x, scale+z);
   PVector d = new PVector(-scale+x, scale+z);
-m.add(compareIntersection(a,b,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(b,c,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(c,d,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(d,a,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+m.add(compareIntersection(a,b));
+m.add(compareIntersection(b,c));
+m.add(compareIntersection(c,d));
+m.add(compareIntersection(d,a));
+
 cubeobj = createShape();
 cubeobj.beginShape(); 
 for(int i = 0; i < m.size(); i++){
 if(m.get(i).length > 1){
+  k++;
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
+println(m.get(i)[1]+"/"+m.get(i)[2]+"/"+BID + "/" + player.x + "/" +player.z);
+j.add(m.get(i)[1]);
+j.add(m.get(i)[2]);
 }
 }
-C2Dplane.add(new flatObj((x-player.x)/player.shiftX,float(-scale+y),(z-player.z)/player.shiftZ,scale+y,cubeobj));
+
+if( k > 1){
+  //C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.x)/player.shiftX,scale+y,cubeobj));
 }
-public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
- int IntersectingState = 0; //no collison
-PVector E = new PVector (B.x-A.x,B.y-A.y);
-PVector F = new PVector (D.x-C.x, D.y-C.y);
-PVector P  = new PVector( -E.y, E.x );
-PVector M = new PVector(A.x-C.x,A.y-C.y);
-if(F.x*P.x+F.y*P.y == 0){
-IntersectingState = 1; //parralllel
-return new Float[] {float(IntersectingState)};
-}else{
-float h = ( M.x*P.x+M.y*P.y ) / (F.x*P.x+F.y*P.y);
-if(h >0.05 && h < 0.95){
- IntersectingState = 2;
 }
-return new Float[] {float(IntersectingState),C.x+F.x*h,C.y+F.y*h};
-}
+public Float[] compareIntersection(PVector A, PVector B){
+  float eq = 0;
+  Float[] res = new Float[] {0.0};
+  if(A.x == B.x){
+    eq = A.x;
+    eq = eq*player.slope+player.intercept;
+    if(eq> min(A.y,B.y) && eq < max(A.y,B.y)){
+      res = new Float[] {1.0,A.x,eq};
+    }
+  }else{
+  if(A.y == B.y){
+    eq = A.y;
+    if(player.slope == 0){
+      if(player.IsPerpendicular == true){
+      eq = A.y;
+      }else{
+      eq = player.intercept;
+      }
+    }else{
+      eq = (eq-player.intercept)/player.slope;
+    }
+    if(eq> min(A.x,B.x) && eq < max(A.x,B.x)){
+      res = new Float[] {1.0,eq,B.y};
+    }
+  }else{
+     res= new Float[] {0.0};
+  }
+  }
+  return res;
 }
 public float GetDistance(float x, float y, float x1, float y1, float x2, float y2) {
     float A = x - x1;
