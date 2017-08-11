@@ -96,50 +96,47 @@ if(m.get(i).length > 1){
 cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
 j.add(m.get(i)[1]);
 j.add(m.get(i)[2]);
+println(m.get(i)[1],m.get(i)[2],BID,player.x,player.z);
 }
 }
 
 if( k > 1){
-  println(player.shiftX + "/" +player.shiftZ);
+ /* println(player.shiftX + "/" +player.shiftZ + "/" + k);
   if(player.shiftZ == 0){
-  C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z),scale+y,cubeobj));
+  C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(3)-player.x),scale+y,cubeobj));
   }else{
    if(player.shiftX == 0){
    C2Dplane.add(new flatObj((j.get(0)-player.x),float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
    }else{
      C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
    }
-  }
+  }*/
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){
   float eq = 0;
   Float[] res = new Float[] {0.0};
-  if(A.x == B.x){
-    eq = A.x;
-    eq = eq*player.slope+player.intercept;
-    if(eq> min(A.y,B.y) && eq < max(A.y,B.y)){
-      res = new Float[] {1.0,A.x,eq};
-    }
+  float IntersectionState = 0;
+  if(A.y == B.y &&B.y == player.z){
+   IntersectionState =2;
   }else{
-  if(A.y == B.y){
-    eq = A.y;
-    if(player.slope == 0){
-      if(player.IsPerpendicular == true){
-      eq = A.y;
-      }else{
-      eq = player.intercept;
-      }
+  if(A.x == B.x &&B.x == player.x){
+   IntersectionState =3;
+  }else{
+    if(player.shiftX == 0){
+    
     }else{
-      eq = (eq-player.intercept)/player.slope;
+        if(player.shiftZ == 0){
+        
+        }else{
+        
+        }
     }
-    if(eq> min(A.x,B.x) && eq < max(A.x,B.x)){
-      res = new Float[] {1.0,eq,B.y};
+    
     }
-  }else{
-     res= new Float[] {0.0};
   }
   }
+  
   return res;
 }
 public float GetDistance(float x, float y, float x1, float y1, float x2, float y2) {
