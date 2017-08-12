@@ -2,6 +2,11 @@ public class cube{
 PImage m;
 int x;
 int y;
+float mx = 0;
+float mz = 0;
+float tx = 0;
+float tz = 0;
+int TintVal = 255;
 boolean IsRender = true;
 boolean IsTint = false;
 int ID;
@@ -16,6 +21,15 @@ this.z = z;
 m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 BID = LoadedBlocks.size();
+}
+public void Prender(int pheight,int pwidth){
+  beginShape(QUADS);
+  texture(m);
+    vertex(player.x+player.shiftX*pwidth, player.y+player.pheight, player.z+player.shiftZ*20, 0, 1);
+  vertex(player.x+player.shiftX*pwidth, player.y-player.pheight,  player.z+player.shiftZ*20, 0, 0);
+  vertex(player.x-player.shiftX*pwidth,  player.y-player.pheight, player.z-player.shiftZ*20, 1, 0);
+  vertex(player.x-player.shiftX*pwidth,  player.y+player.pheight,  player.z-player.shiftZ*20, 1, 1);
+  endShape();
 }
 public void render(int scale){
   IsTint = false;
@@ -46,12 +60,6 @@ public void render(int scale){
   vertex(-scale+x, -scale+y, -scale+z, 1, 0);
   vertex(-scale+x,  scale+y, -scale+z, 1, 1);
   vertex( scale+x,  scale+y, -scale+z, 0, 1);
-  //top face. always show
-  /*vertex(-scale+x,  scale+y,  scale+z, 0, 0);
-  vertex( scale+x,  scale+y, scale+z, 1, 0);
-  vertex( scale+x,  scale+y, -scale+z, 1, 1);
-  vertex(-scale+x,  scale+y, -scale+z, 0, 1);*/
-  //bottom face. never show/*
   vertex(-scale+x, -scale+y, -scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
@@ -98,14 +106,21 @@ m.add(compareIntersection(vectors[i],vectors[i+1]));
 if(m.size() > 1){
 cubeobj = createShape();
 cubeobj.beginShape(); 
-cubeobj.vertex(m.get(0)[1],y+scale,m.get(0)[2]);
-cubeobj.vertex(m.get(1)[1],y+scale,m.get(1)[2]);
-cubeobj.vertex(m.get(0)[1],y-scale,m.get(0)[2]);
-cubeobj.vertex(m.get(1)[1],y-scale,m.get(1)[2]);
+cubeobj.vertex(m.get(0)[1],y+scale,m.get(0)[2],0,1);
+cubeobj.vertex(m.get(1)[1],y+scale,m.get(1)[2],0,1);
+cubeobj.vertex(m.get(0)[1],y-scale,m.get(0)[2],0,1);
+cubeobj.vertex(m.get(1)[1],y-scale,m.get(1)[2],0,1);
 j.add(m.get(0)[1]);
 j.add(m.get(1)[2]);
+mx = m.get(0)[1];
+mz = m.get(0)[2];
+tx = m.get(1)[1];
+tz = m.get(1)[2];
 cubeobj.endShape();
+IsTint = true;
 println(j.get(0)+"/"+j.get(1)+"/"+BID+"/" +  player.x + "/" +player.z);
+}else{
+IsTint = false;
 }
 if( k > 1){
  /* println(player.shiftX + "/" +player.shiftZ + "/" + k);

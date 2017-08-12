@@ -112,7 +112,7 @@ for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
 //println(player.x);
-player.mCube.render(scale/2);
+player.mCube.Prender(player.pheight/2,player.pwidth);
 }
 public AudioPlayer getSound(String m){
   audio = minim.loadFile(m);

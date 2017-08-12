@@ -6,6 +6,8 @@ public float FXpos;
 public float Yvel;
 public float shiftZ;
 public float shiftX;
+public int pwidth = scale;
+public int pheight = int(scale*1.618);
 private float x,y,z;
 public boolean isJumping = false;
 public float Damage;
@@ -19,7 +21,7 @@ public Player(int health,int speed, float Damage){
   this.Damage = Damage;
   isJumping = false;
   x = width/2;
-  y = height/2- scale*3/2;
+  y = height/2- pheight*1.618;
   z = 0;
   mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
