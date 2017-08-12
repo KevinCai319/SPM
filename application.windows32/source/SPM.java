@@ -43,7 +43,7 @@ ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 30;
+float ang = 90;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -63,13 +63,14 @@ public void setup(){
 player = new Player(100,4,2);
 IBlock.clear();
 
+surface.setResizable(true);
 minim = new Minim(this);
-GameAudio.play("pink floyd","A");
+//GameAudio.play("pink floyd","A");
 //GameAudio.play("pink floyed","A");
-changeAppTitle("SPM//I like potatoes");
+changeAppTitle("SPM");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
-
+textureMode(NORMAL);
 eyeY = height/2- scale*15;
 
 eyeZ = d;
@@ -97,8 +98,6 @@ lights();
 editCam(0);
 camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
 ortho(-width/4, width/4, -height/4, height/4);
-if(IsLoaded ==false){
-}
 Renderscene();
 endCamera();
 player.calculateShift(ang);
@@ -107,10 +106,17 @@ player.calculateShift(ang);
 public void load(){
   if(CurrentlyLoading == false){
   CurrentlyLoading = true;
-  load.StartLoad(5,5,5);
+  C2Dplane.clear();
+  IBlock.clear();
+  load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
-  load.LoadUpdate();
+  for(int i = 0; i < 200 && IsLoaded == false; i++){
+    if(!(load.cx > load.x && load.cz > load.x)){
+        load.LoadUpdate();
+    }
+  }
+  //println(load.z);
   }
 }
 public void editCam(float fraction){
@@ -125,9 +131,11 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
+  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+//println(player.x);
 player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){
@@ -239,6 +247,7 @@ int y;
 boolean IsRender = true;
 boolean IsTint = false;
 int ID;
+int BID;
 int z;
 int dist = scale*2;
 public cube(int BlockID,int x, int y, int z){
@@ -246,25 +255,24 @@ ID = BlockID;
 this.x = x;
 this.y = y;
 this.z = z;
-  textureMode(NORMAL);
-m = loadImage("/Textures/"+ ID + ".png");
+m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
-int ID = LoadedBlocks.size();
+BID = LoadedBlocks.size();
 }
 public void render(int scale){
   IsTint = false;
    IsRender = false;
-    if (GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist){
+    if (GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist){
     IsRender = true;
     }else{
-    if(IsRotating){
+    if(IsRotating&& GetDist(x,z,player.x,player.z)<scale*50){
       IsRender = true;
       IsTint = true;
     }
     }
     
   if (IsRender){
-    println(abs((player.slope*x)+z+player.intercept)/player.slope);
+  IsIntersecting();
  beginShape(QUADS);
  if(IsTint){
  tint(50);
@@ -285,7 +293,7 @@ public void render(int scale){
   vertex( scale+x,  scale+y, scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
   vertex(-scale+x,  scale+y, -scale+z, 0, 1);*/
-  //bottom face. never show
+  //bottom face. never show/*
   vertex(-scale+x, -scale+y, -scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
@@ -302,46 +310,125 @@ public void render(int scale){
   }
 }
 public void IsIntersecting(){
-  float dist = GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ);
-  if(dist*dist < scale*scale*2){//lies on the line of intersection
+  if(BID != 1){
+  if(GetDistance(PApplet.parseFloat(x),PApplet.parseFloat(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist){//lies on the line of intersection
     crossSection();
+  }
   }
 }
 public void crossSection(){
-  PShape cubeobj; 
+  PShape cubeobj;
+  int k =0;
+  Float[] tmp;
   ArrayList<Float[]> m = new ArrayList<Float[]>();
+   ArrayList<Float> j = new ArrayList<Float>();
   PVector a = new PVector(-scale+x, -scale+z);
   PVector b = new PVector( scale+x, -scale+z);
   PVector c = new PVector( scale+x, scale+z);
   PVector d = new PVector(-scale+x, scale+z);
-m.add(compareIntersection(a,b,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(b,c,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(c,d,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
-m.add(compareIntersection(d,a,new PVector(player.x+30000*player.shiftX,player.z+30000*player.shiftZ),new PVector(player.x-30000*player.shiftX,player.z-30000*player.shiftZ)));
+  PVector[] vectors = new PVector[] {a,b,c,d};
+for(int i = 0; i <vectors.length-1 ; i++){
+if(compareIntersection(vectors[i],vectors[i+1]).length > 2 && m.size() < 3) {
+  if(compareIntersection(vectors[i],vectors[i+1]).length > 3){
+    m.add(new Float[]{compareIntersection(vectors[i],vectors[i+1])[1],compareIntersection(vectors[i],vectors[i+1])[2]});
+    m.add(new Float[]{compareIntersection(vectors[i],vectors[i+1])[3],compareIntersection(vectors[i],vectors[i+1])[4]});
+  }else{
+m.add(compareIntersection(vectors[i],vectors[i+1]));
+  }
+}
+}
+if(m.size() > 1){
 cubeobj = createShape();
 cubeobj.beginShape(); 
-for(int i = 0; i < m.size(); i++){
-if(m.get(i).length > 1){
-cubeobj.vertex(m.get(i)[1],m.get(i)[2]);
+cubeobj.vertex(m.get(0)[1],y+scale,m.get(0)[2]);
+cubeobj.vertex(m.get(1)[1],y+scale,m.get(1)[2]);
+cubeobj.vertex(m.get(0)[1],y-scale,m.get(0)[2]);
+cubeobj.vertex(m.get(1)[1],y-scale,m.get(1)[2]);
+j.add(m.get(0)[1]);
+j.add(m.get(1)[2]);
+cubeobj.endShape();
+println(j.get(0)+"/"+j.get(1)+"/"+BID+"/" +  player.x + "/" +player.z);
+}
+if( k > 1){
+ /* println(player.shiftX + "/" +player.shiftZ + "/" + k);
+  if(player.shiftZ == 0){
+  C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(3)-player.x),scale+y,cubeobj));
+  }else{
+   if(player.shiftX == 0){
+   C2Dplane.add(new flatObj((j.get(0)-player.x),float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
+   }else{
+     C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
+   }
+  }*/
 }
 }
-}
-public Float[] compareIntersection(PVector A, PVector B,PVector C,PVector D){
- int IntersectingState = 0; //no collison
-PVector E = new PVector (B.x-A.x,B.y-A.y);
-PVector F = new PVector (D.x-C.x, D.y-C.y);
-PVector P  = new PVector( -E.y, E.x );
-PVector M = new PVector(A.x-C.x,A.y-C.y);
-if(F.x*P.x+F.y*P.y == 0){
-IntersectingState = 1; //parralllel
-return new Float[] {PApplet.parseFloat(IntersectingState)};
-}else{
-float h = ( M.x*P.x+M.y*P.y ) / (F.x*P.x+F.y*P.y);
-if(h >0.05f && h < 0.95f){
- IntersectingState = 2;
-}
-return new Float[] {PApplet.parseFloat(IntersectingState),C.x+F.x*h,C.y+F.y*h};
-}
+public Float[] compareIntersection(PVector A, PVector B){
+  float eq = 0;
+  float jx=0;
+  float jz=0;
+  float px = 0;
+  float pz=0;
+  boolean IsIntersecting = false;
+  Float[] res = new Float[] {0.0f};
+  float IntersectionState = 0;
+  if(A.y == B.y &&B.y == player.z){
+    jx = A.y;
+    jz = A.x;
+    px = B.x;
+    pz = B.y;
+   IntersectionState =2;
+   IsIntersecting = true;
+  }else{
+  if(A.x == B.x &&B.x == player.x){
+    jx = A.x;
+    jz = A.y;
+    px = B.x;
+    pz = B.y;
+   IntersectionState =3;
+   IsIntersecting = true;
+  }else{
+    if(player.shiftX == 0){
+      IntersectionState = 4;
+      if(player.x > min(A.x,B.x)&& player.x < max(A.x,B.x)){
+        jx = player.x;
+        jz = A.y;
+        IsIntersecting = true;
+      }
+    }else{
+        if(player.shiftZ == 0){
+        if(player.z > min(A.y,B.y)&& player.z < max(A.y,B.y)){
+          jx = A.x;
+          jz = player.z;
+          IsIntersecting = true;
+        }
+        }else{
+           if(A.x == B.x){
+             if(A.x*player.slope+player.intercept >min(A.y,B.y) &&A.x*player.slope+player.intercept <max(A.y,B.y) ){
+               jx = A.x;
+               jz = A.x*player.slope+player.intercept;
+               IsIntersecting = true;
+             }
+           }else{
+             if((A.y-player.intercept)/player.slope >min(A.x,B.x) &&(A.y-player.intercept)/player.slope <max(A.x,B.x) ){
+               jx = (A.y-player.intercept)/player.slope;
+               jz = A.y;
+               IsIntersecting = true;
+             }
+           }
+        }
+    }
+    
+    }
+  }
+  
+  if(IsIntersecting){
+    if(IntersectionState ==  2 || IntersectionState == 3){
+      res = new Float[] {IntersectionState,jx,jz,px,pz};
+    }else{
+    res = new Float[] {IntersectionState,jx,jz};
+    }
+  }
+  return res;
 }
 public float GetDistance(float x, float y, float x1, float y1, float x2, float y2) {
     float A = x - x1;
@@ -354,6 +441,9 @@ public float GetDistance(float x, float y, float x1, float y1, float x2, float y
     float len_sq = E * E + F * F;
     return dot* dot/ len_sq;
   }
+public float GetDist(float x, float y, float x1,float y1){
+  return sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
+}
 }
 public class DamageBlock extends cube{
 
@@ -388,9 +478,20 @@ cx = -x;
 }else{
 cx++;
 }
-println(cz);
+//println(cx);
 if(cz<= x || cx<=x){
-IBlock.add(new cube(0,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+  if (cz > 2){
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*2,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*4,scale*cz*2));
+  }else{
+    if (cx > 2){
+  IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+  IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2)-scale*2,scale*cz*2));
+    }else{
+      IBlock.add(new cube(5,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+    }
+  }
 }
 if(cx> x && cz > x){
 IsLoaded = true;
@@ -408,6 +509,7 @@ public class Player{
 public int health;
 public int speed;
 public float FXvel;
+public float FXpos;
 public float Yvel;
 public float shiftZ;
 public float shiftX;
@@ -458,26 +560,8 @@ intercept = z-x*slope;
 }
 public void updatePlayer(){
   if(IsRotating == false){
-  /*if(KeyUp && isJumping == false){           
-    Yvel = -200;
-    /*if(Yvel > 0){
-      Yvel *= -0.8333333;
-    }else{
-      Yvel *= 1.2;
-    }*/
-  /*  isJumping = true;
+  if (KeyUp){
   }
-  Yvel *= 0.8;
-  if (abs(Yvel) < 0.05){
-    Yvel = 0;
-  }
-  if(abs(Yvel) > 8){
-    if(Yvel > 7){
-      Yvel = 8;
-    }else{
-      Yvel = -8;
-    }
-  }*/
   if(KeyLeft){
     FXvel -= 0.07f;
     if(FXvel > 0){
@@ -509,11 +593,13 @@ public void updatePlayer(){
   
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
+  FXpos+=FXvel;
   mCube.x = PApplet.parseInt(x);
   mCube.y = PApplet.parseInt(y);
   mCube.z = PApplet.parseInt(z);
   }else{
   FXvel = 0;
+  FXpos = 0;
   }
 }
 
@@ -591,8 +677,8 @@ float FxT;
 float yT;
 float FxB;
 float yB;
-public flatObj(float fx, float y, float fb, float yb){
-  
+public flatObj(float fx, float y, float fb, float yb,PShape m){
+  println(fx+"/" + y + "/" + fb + "/" + yb);
 }
 }
   public void settings() { 

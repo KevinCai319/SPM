@@ -19,7 +19,7 @@ ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 30;
+float ang = 90;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -39,13 +39,14 @@ void setup(){
 player = new Player(100,4,2);
 IBlock.clear();
 size(1200, 900, P3D);
+surface.setResizable(true);
 minim = new Minim(this);
-GameAudio.play("pink floyd","A");
+//GameAudio.play("pink floyd","A");
 //GameAudio.play("pink floyed","A");
-changeAppTitle("SPM//I like potatoes");
+changeAppTitle("SPM");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
-
+textureMode(NORMAL);
 eyeY = height/2- scale*15;
 
 eyeZ = d;
@@ -73,8 +74,6 @@ lights();
 editCam(0);
 camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
 ortho(-width/4, width/4, -height/4, height/4);
-if(IsLoaded ==false){
-}
 Renderscene();
 endCamera();
 player.calculateShift(ang);
@@ -83,10 +82,17 @@ player.calculateShift(ang);
 public void load(){
   if(CurrentlyLoading == false){
   CurrentlyLoading = true;
-  load.StartLoad(5,5,5);
+  C2Dplane.clear();
+  IBlock.clear();
+  load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
-  load.LoadUpdate();
+  for(int i = 0; i < 200 && IsLoaded == false; i++){
+    if(!(load.cx > load.x && load.cz > load.x)){
+        load.LoadUpdate();
+    }
+  }
+  //println(load.z);
   }
 }
 public void editCam(float fraction){
@@ -101,9 +107,11 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
+  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
+//println(player.x);
 player.mCube.render(scale/2);
 }
 public AudioPlayer getSound(String m){

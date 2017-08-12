@@ -2,6 +2,7 @@ public class Player{
 public int health;
 public int speed;
 public float FXvel;
+public float FXpos;
 public float Yvel;
 public float shiftZ;
 public float shiftX;
@@ -52,26 +53,8 @@ intercept = z-x*slope;
 }
 public void updatePlayer(){
   if(IsRotating == false){
-  /*if(KeyUp && isJumping == false){           
-    Yvel = -200;
-    /*if(Yvel > 0){
-      Yvel *= -0.8333333;
-    }else{
-      Yvel *= 1.2;
-    }*/
-  /*  isJumping = true;
+  if (KeyUp){
   }
-  Yvel *= 0.8;
-  if (abs(Yvel) < 0.05){
-    Yvel = 0;
-  }
-  if(abs(Yvel) > 8){
-    if(Yvel > 7){
-      Yvel = 8;
-    }else{
-      Yvel = -8;
-    }
-  }*/
   if(KeyLeft){
     FXvel -= 0.07;
     if(FXvel > 0){
@@ -103,11 +86,13 @@ public void updatePlayer(){
   
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
+  FXpos+=FXvel;
   mCube.x = int(x);
   mCube.y = int(y);
   mCube.z = int(z);
   }else{
   FXvel = 0;
+  FXpos = 0;
   }
 }
 

@@ -26,11 +26,14 @@ cx++;
 if(cz<= x || cx<=x){
   if (cz > 2){
 IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*2,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*4,scale*cz*2));
   }else{
     if (cx > 2){
   IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+  IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2)-scale*2,scale*cz*2));
     }else{
-      IBlock.add(new cube(4,(width/2)+scale*2*cx,(height/2),scale*cz*2));
+      IBlock.add(new cube(5,(width/2)+scale*2*cx,(height/2),scale*cz*2));
     }
   }
 }
