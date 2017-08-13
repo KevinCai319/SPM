@@ -13,6 +13,8 @@ public int CameraState;
   boolean KeyLeft = false;
   boolean KeyDown = false;
   boolean Keyspace = false;
+  boolean KeyQ = false;
+  boolean KeyE = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
 ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
@@ -125,8 +127,13 @@ void lol (int levelID){
     }
   }
 void rotationTransition(){
-if(IsRotating == true && Keyspace == true){
-ang+=1;
+if(IsRotating == true){
+  if(KeyE){
+ang++;
+  }
+    if(KeyQ){
+ang--;
+  }
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -161,10 +168,18 @@ void keyPressed(){
     }
     
   }
-  if (keyCode == ' ' && IsRotating == false){
+  /*if (keyCode == ' ' && IsRotating == false){
     Keyspace = true;
     IsRotating = true;
     ang+=2;
+  }*/
+    if (key == 'e'){
+    KeyE = true;
+    IsRotating = true;
+  }
+    if (key == 'q'){
+    KeyQ = true;
+    IsRotating = true;
   }
 }
 void keyReleased(){
@@ -188,10 +203,17 @@ void keyReleased(){
     }
     
   }
-  if (keyCode == ' '){
-    Keyspace = false;
-    //ang = 90;
+  if (key == 'e'){
+    KeyE = false;
+    if(!KeyQ){
     IsRotating = false;
+    }
+  }
+    if (key == 'q'){
+    KeyQ = false;
+    if(!KeyE){
+    IsRotating = false;
+    }
   }
 }
 void changeAppTitle(String title) {

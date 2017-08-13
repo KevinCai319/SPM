@@ -45,13 +45,13 @@ public void render(int scale){
     
   if (IsRender){
   IsIntersecting();
- /*beginShape(QUADS);*/
  if(IsTint){
  tint(50);
  }else{
    tint(255,255);
  }
-  /*texture(m);
+ beginShape(QUADS);
+  texture(m);
   vertex(-scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 0);
   vertex( scale+x,  scale+y,  scale+z, 1, 1);
@@ -72,7 +72,7 @@ public void render(int scale){
   vertex(-scale+x, -scale+y,  scale+z, 1, 0);
   vertex(-scale+x,  scale+y,  scale+z, 1, 1);
   vertex(-scale+x,  scale+y, -scale+z, 0, 1);
-  endShape();*/
+  endShape();
   }
 }
 public void IsIntersecting(){
