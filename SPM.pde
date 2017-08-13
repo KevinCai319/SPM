@@ -19,7 +19,7 @@ ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 90;
+float ang = 0;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -190,6 +190,7 @@ void keyReleased(){
   }
   if (keyCode == ' '){
     Keyspace = false;
+    //ang = 90;
     IsRotating = false;
   }
 }

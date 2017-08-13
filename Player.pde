@@ -44,7 +44,7 @@ shiftX = cos(radians(ang));
  player.genEquation();
 }
 public void genEquation(){
-if (abs(shiftX) > 0.001){
+if (abs(shiftX) > 0.0000001){
   IsPerpendicular = false;
 slope = shiftZ/shiftX;
 }else{
@@ -54,6 +54,12 @@ slope = 0;
 intercept = z-x*slope;
 }
 public void updatePlayer(){
+  if(abs(shiftX) < 0.0000001){
+shiftX = 0;
+}
+if(abs(shiftZ) < 0.0000001){
+  shiftZ = 0;
+}
   if(IsRotating == false){
   if (KeyUp){
   }
