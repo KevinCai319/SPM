@@ -11,12 +11,15 @@ public float shiftX;
 private float x,y,z;
 private boolean isColliding = false;
 public boolean isJumping = false;
+public ArrayList<AABBHitbox> Intersecting = new ArrayList<AABBHitbox>();
 public float Damage;
 private cube mCube;
 AABBHitbox HitBox;
 boolean IsPerpendicular = false;
 float slope;
 float intercept;
+float ly;
+float lx;
 public Player(int health,int speed, float Damage){
   this.health = health;
   this.speed = speed;
@@ -31,7 +34,7 @@ public Player(int health,int speed, float Damage){
   shiftX = 1;
 }
 public void generateHitbox(){
-  HitBox = new AABBHitbox(float(pwidth/2),float(pheight/2),new PVector(0,player.y));
+  HitBox = new AABBHitbox(float(pwidth),float(pheight),new PVector(0,player.y));
 }
 public float getX(){
 return x;
@@ -57,10 +60,12 @@ slope = 0;
 }
 intercept = z-x*slope;
 }
-public void CheckCollision(){
+public void CheckCollision(AABBHitbox HitBox){
+  Intersecting.clear();
   isColliding = false;
   for(int i = 0; i < C2Dplane.size();i++){
     if(HitBox.IsColliding(C2Dplane.get(i).k)){
+      Intersecting.add(C2Dplane.get(i).k);
       isColliding = true;
     }
   }
@@ -81,31 +86,55 @@ if(abs(shiftZ) < 0.0000001){
   shiftZ = 0;
 }
   if(IsRotating == false){
-    CheckCollision();
+    CheckCollision(HitBox);
   if (KeyUp&&isJumping == false){
     isJumping = true;
+    ly = y;
+    lx = FXpos;
     Yvel = -scale;
   }
   if(isJumping){
-    if(Yvel > -scale/10 && Yvel< 0){
+    if(Yvel > -5 && Yvel< 0){
       Yvel = 0.2;
     }
     if (Yvel < 0){
-      Yvel*= 0.95;
+      Yvel*= 0.9;
      
     }else{
-       Yvel*=1.05;
+       Yvel*=1.111;
     }
-    CheckCollision();
+    CheckCollision(HitBox);
     //println(C2Dplane.size());
     if(isColliding){
+      if(Yvel >= 0.3){
     isJumping = false;
+    int i =0;
+    while(isColliding){
+      CheckCollision(new AABBHitbox(pwidth,pheight,new PVector(0,HitBox.center.y+i)));
+      i--;
+    }
+    y += i+1;
     Yvel = 0;
+      }else{
+        if(!( Yvel< -15) ){
+        println(Yvel);
+      int i = 0;
+          while(isColliding){
+            CheckCollision(new AABBHitbox(pwidth,pheight,new PVector(0,HitBox.center.y+i)));
+            i++;
+          }
+          if(y+i < ly){
+          y = y+i;
+          }
+      //Yvel =  -0.2;
+      }
+    }
+
     }
   }else{
    if(!isColliding){
      if(Yvel <= 0){
-      Yvel = -1;
+      Yvel = 1;
      }else{
        Yvel *= 1.05;
      }

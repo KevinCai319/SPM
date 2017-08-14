@@ -134,7 +134,6 @@ endShape();
       tx = GetDist(tx,tz,player.x,player.z);
     }
     C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,BID));
-    println(C2Dplane.size());
 }else{
 IsTint = true;
 }
