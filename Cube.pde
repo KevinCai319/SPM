@@ -50,6 +50,7 @@ public void render(int scale){
  }else{
    tint(255,255);
  }
+ if(IsRotating || !IsRotating && !IsTint){ 
  beginShape(QUADS);
   texture(m);
   vertex(-scale+x, -scale+y,  scale+z, 0, 0);
@@ -75,6 +76,7 @@ public void render(int scale){
   endShape();
   }
 }
+}
 public void IsIntersecting(){
   if(BID != 1){
   if(GetDistance(float(x),float(z),player.x,player.z,player.x+player.shiftX,player.z+player.shiftZ)< scale*dist &&GetDist(x,z,player.x,player.z)<scale*dist*2){//lies on the line of intersection
@@ -84,6 +86,7 @@ public void IsIntersecting(){
 }
 public void crossSection(){
   PShape cubeobj;
+  cubeobj = createShape();
   int k =0;
   ArrayList<Float[]> ml = new ArrayList<Float[]>();
    ArrayList<Float> j = new ArrayList<Float>();
@@ -103,7 +106,6 @@ if(compareIntersection(vectors[i%vectors.length],vectors[(i+1)%vectors.length]).
 }
 }
 if(ml.size() > 1){
-cubeobj = createShape();
 cubeobj.beginShape(QUADS); 
 texture(m);
 cubeobj.vertex(ml.get(0)[1],y+scale,ml.get(0)[2],0,1);
@@ -131,16 +133,17 @@ endShape();
 IsTint = true;
 }
 if( k > 1){
- /* println(player.shiftX + "/" +player.shiftZ + "/" + k);      
-  if(player.shiftZ == 0){
-  C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(3)-player.x),scale+y,cubeobj));
-  }else{
-   if(player.shiftX == 0){
-   C2Dplane.add(new flatObj((j.get(0)-player.x),float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
-   }else{
-     C2Dplane.add(new flatObj((j.get(0)-player.x)/player.shiftX,float(-scale+y),(j.get(1)-player.z)/player.shiftZ,scale+y,cubeobj));
-   }
-  }*/
+    if( GetDist(mx,mz,player.x,player.z) < GetDist(mx,mz,player.x+player.shiftX,player.z+player.shiftZ)){
+      mx = -GetDist(mx,mz,player.x,player.z);
+    }else{
+      mx = GetDist(mx,mz,player.x,player.z);
+    }
+    if( GetDist(tx,tz,player.x,player.z) < GetDist(tx,tz,player.x+player.shiftX,player.z+player.shiftZ)){
+      tx = -GetDist(tx,tz,player.x,player.z);
+    }else{
+      tx = GetDist(tx,tz,player.x,player.z);
+    }
+    C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,cubeobj));
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){

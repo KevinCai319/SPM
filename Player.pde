@@ -26,9 +26,6 @@ public Player(int health,int speed, float Damage){
   mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
 }
-public void RenderPlayer(){
-
-}
 public float getX(){
 return x;
 }

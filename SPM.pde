@@ -44,7 +44,7 @@ size(1200, 900, P3D);
 surface.setResizable(true);
 minim = new Minim(this);
 //GameAudio.play("pink floyd","A");
-//GameAudio.play("pink floyed","A");
+GameAudio.play("credits","A");
 changeAppTitle("SPM");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
