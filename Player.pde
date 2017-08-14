@@ -26,6 +26,7 @@ public Player(int health,int speed, float Damage){
   z = 0;
   mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
+  HitBox = new AABBHitbox(float (pwidth/2),float(pheight/2),new PVector(0,player.y));
 }
 public float getX(){
 return x;
@@ -99,6 +100,7 @@ if(abs(shiftZ) < 0.0000001){
   mCube.x = int(x);
   mCube.y = int(y);
   mCube.z = int(z);
+  HitBox.center.y = y;
   }else{
   FXvel = 0;
   FXpos = 0;

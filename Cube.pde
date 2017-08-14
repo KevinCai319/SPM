@@ -22,7 +22,7 @@ m = loadImage("/Textures/"+ ID + ".PNG");
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 BID = LoadedBlocks.size();
 }
-public void Prender(int pheight,int pwidth){
+public void Prender(int pwidth){
   beginShape(QUADS);
   texture(m);
     vertex(player.x+player.shiftX*pwidth, player.y+player.pheight, player.z+player.shiftZ*20, 0, 1);
