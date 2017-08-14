@@ -5,10 +5,11 @@ public float FXvel;
 public float FXpos;
 public float Yvel;
 public float shiftZ;
-public float shiftX;
 public int pwidth = scale;
 public int pheight = int(scale*1.618);
+public float shiftX;
 private float x,y,z;
+private boolean isColliding = false;
 public boolean isJumping = false;
 public float Damage;
 private cube mCube;
@@ -24,9 +25,13 @@ public Player(int health,int speed, float Damage){
   x = width/2;
   y = height/2- pheight*1.618;
   z = 0;
+  pwidth = scale;
+  height = int(scale*1.618);
   mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
-  HitBox = new AABBHitbox(float (pwidth/2),float(pheight/2),new PVector(0,player.y));
+}
+public void generateHitbox(){
+  HitBox = new AABBHitbox(float(pwidth/2),float(pheight/2),new PVector(0,player.y));
 }
 public float getX(){
 return x;
@@ -53,7 +58,20 @@ slope = 0;
 intercept = z-x*slope;
 }
 public void CheckCollision(){
+  isColliding = false;
+  for(int i = 0; i < C2Dplane.size();i++){
+    if(HitBox.IsColliding(C2Dplane.get(i).k)){
+      isColliding = true;
+    }
+  }
 
+}
+public void respawn(){
+    isJumping = false;
+  x = width/2;
+  y = height/2- pheight*1.618;
+  z = 0;
+  Yvel = 0;
 }
 public void updatePlayer(){
   if(abs(shiftX) < 0.0000001){
@@ -63,7 +81,37 @@ if(abs(shiftZ) < 0.0000001){
   shiftZ = 0;
 }
   if(IsRotating == false){
-  if (KeyUp){
+    CheckCollision();
+  if (KeyUp&&isJumping == false){
+    isJumping = true;
+    Yvel = -scale;
+  }
+  if(isJumping){
+    if(Yvel > -scale/10 && Yvel< 0){
+      Yvel = 0.2;
+    }
+    if (Yvel < 0){
+      Yvel*= 0.95;
+     
+    }else{
+       Yvel*=1.05;
+    }
+    CheckCollision();
+    //println(C2Dplane.size());
+    if(isColliding){
+    isJumping = false;
+    Yvel = 0;
+    }
+  }else{
+   if(!isColliding){
+     if(Yvel <= 0){
+      Yvel = -1;
+     }else{
+       Yvel *= 1.05;
+     }
+    }else{
+      Yvel = 0;
+    }
   }
   if(KeyLeft){
     FXvel -= 0.07;
@@ -101,6 +149,9 @@ if(abs(shiftZ) < 0.0000001){
   mCube.y = int(y);
   mCube.z = int(z);
   HitBox.center.y = y;
+  if(y > 1000){
+  respawn();
+  }
   }else{
   FXvel = 0;
   FXpos = 0;

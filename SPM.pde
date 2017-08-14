@@ -50,7 +50,7 @@ titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
 textureMode(NORMAL);
 eyeY = height/2- scale*15;
-
+player.generateHitbox();
 eyeZ = d;
 foucusX = player.x;
 foucusY = player.y;
@@ -61,6 +61,7 @@ postfoucusZ = player.z;
 }
 void draw(){
 frames++;
+C2Dplane.clear();
 renderFrame();
 rotationTransition();
 player.updatePlayer();
@@ -89,12 +90,13 @@ public void load(){
   load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
-  for(int i = 0; i < 200 && IsLoaded == false; i++){
+  for(int i = 0; i < 100 && IsLoaded == false; i++){
     if(!(load.cx > load.x && load.cz > load.x)){
         load.LoadUpdate();
     }
   }
   //println(load.z);
+  
   }
 }
 public void editCam(float fraction){
@@ -109,7 +111,6 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
-  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
@@ -165,11 +166,9 @@ void keyPressed(){
       KeyDown = true;
     }
     
-  /*if (keyCode == ' ' && IsRotating == false){
+  if (keyCode == ' ' && IsRotating == false){
     Keyspace = true;
-    IsRotating = true;
-    ang+=2;
-  }*/
+  }
     if (key == 'e'){
     KeyE = true;
     IsRotating = true;
@@ -208,6 +207,9 @@ void keyReleased(){
     if(!KeyE){
     IsRotating = false;
     }
+  }
+ if (keyCode == ' ' && IsRotating == false){
+    Keyspace = false;
   }
 }
 void changeAppTitle(String title) {

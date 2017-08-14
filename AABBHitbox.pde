@@ -7,7 +7,7 @@ public AABBHitbox(float HalfX,float HalfY,PVector center){
   this.halfX = HalfX;
   this.halfY = HalfY;
 }
-public boolean IsColiding(AABBHitbox tile){
+public boolean IsColliding(AABBHitbox tile){
   if ( abs(center.x - tile.center.x) > halfX + tile.halfX ){
     return false;
   }

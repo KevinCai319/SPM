@@ -18,7 +18,11 @@ ID = BlockID;
 this.x = x;
 this.y = y;
 this.z = z;
+if(ID != 0){
 m = loadImage("/Textures/"+ ID + ".PNG");
+}else{
+  m = loadImage("/Textures/"+ ID + ".png");
+}
 LoadedBlocks.add(new Integer[]{this.x,this.y,this.z});
 BID = LoadedBlocks.size();
 }
@@ -85,7 +89,6 @@ public void IsIntersecting(){
   }
 }
 public void crossSection(){
-  int k =0;
   ArrayList<Float[]> ml = new ArrayList<Float[]>();
    ArrayList<Float> j = new ArrayList<Float>();
   PVector a = new PVector(-scale+x, -scale+z);
@@ -120,10 +123,6 @@ vertex(ml.get(0)[1],y-scale,ml.get(0)[2],0,1);
 vertex(ml.get(1)[1],y-scale,ml.get(1)[2],1,1);
 vertex(ml.get(1)[1],y+scale,ml.get(1)[2],1,0);
 endShape();
-}else{
-IsTint = true;
-}
-if( k > 1){
     if( GetDist(mx,mz,player.x,player.z) < GetDist(mx,mz,player.x+player.shiftX,player.z+player.shiftZ)){
       mx = -GetDist(mx,mz,player.x,player.z);
     }else{
@@ -135,6 +134,9 @@ if( k > 1){
       tx = GetDist(tx,tz,player.x,player.z);
     }
     C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,BID));
+    println(C2Dplane.size());
+}else{
+IsTint = true;
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){
