@@ -148,26 +148,23 @@ void UpdateAngle() {
   eyeZ = (foucusZ)+d*cos(radians(ang));
 }
 void keyPressed(){
-   if(key == CODED)
-  {
-    if (keyCode == LEFT)
+    if (key == 'a')
     {
       KeyLeft = true;
     }
-    if(keyCode == RIGHT)
+    if(key == 'd')
     {
       KeyRight = true; 
     }
-    if (keyCode == UP)
+    if (key == 'w')
     {
       KeyUp = true;
     }
-    if(keyCode == DOWN)
+    if(key == 's')
     {
       KeyDown = true;
     }
     
-  }
   /*if (keyCode == ' ' && IsRotating == false){
     Keyspace = true;
     IsRotating = true;
@@ -183,26 +180,23 @@ void keyPressed(){
   }
 }
 void keyReleased(){
-   if(key == CODED)
-  {
-    if (keyCode == LEFT)
+    if (key == 'a')
     {
       KeyLeft = false;
     }
-    if(keyCode == RIGHT)
+    if(key == 'd')
     {
       KeyRight = false; 
     }
-    if (keyCode == UP)
+    if (key == 'w')
     {
       KeyUp = false;
     }
-    if(keyCode == DOWN)
+    if(key == 's')
     {
       KeyDown = false;
     }
     
-  }
   if (key == 'e'){
     KeyE = false;
     if(!KeyQ){

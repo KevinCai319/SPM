@@ -85,8 +85,6 @@ public void IsIntersecting(){
   }
 }
 public void crossSection(){
-  PShape cubeobj;
-  cubeobj = createShape();
   int k =0;
   ArrayList<Float[]> ml = new ArrayList<Float[]>();
    ArrayList<Float> j = new ArrayList<Float>();
@@ -106,19 +104,12 @@ if(compareIntersection(vectors[i%vectors.length],vectors[(i+1)%vectors.length]).
 }
 }
 if(ml.size() > 1){
-cubeobj.beginShape(QUADS); 
-texture(m);
-cubeobj.vertex(ml.get(0)[1],y+scale,ml.get(0)[2],0,1);
-cubeobj.vertex(ml.get(1)[1],y+scale,ml.get(1)[2],0,1);
-cubeobj.vertex(ml.get(0)[1],y-scale,ml.get(0)[2],0,1);
-cubeobj.vertex(ml.get(1)[1],y-scale,ml.get(1)[2],0,1);
 j.add(ml.get(0)[1]);
 j.add(ml.get(1)[2]);
 mx = ml.get(0)[1];
 mz = ml.get(0)[2];
 tx = ml.get(1)[1];
 tz = ml.get(1)[2];
-cubeobj.endShape();
 IsTint = false;
 //println(m.get(0)[0]+"/"+player.shiftZ);
 //println(j.get(0)+"/"+j.get(1)+"/"+BID+"/" +  player.slope);
@@ -143,7 +134,7 @@ if( k > 1){
     }else{
       tx = GetDist(tx,tz,player.x,player.z);
     }
-    C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,cubeobj));
+    C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,BID));
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){

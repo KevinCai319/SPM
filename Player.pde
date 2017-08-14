@@ -12,6 +12,7 @@ private float x,y,z;
 public boolean isJumping = false;
 public float Damage;
 private cube mCube;
+AABBHitbox HitBox;
 boolean IsPerpendicular = false;
 float slope;
 float intercept;
@@ -49,6 +50,9 @@ IsPerpendicular = true;
 slope = 0;
 }
 intercept = z-x*slope;
+}
+public void CheckCollision(){
+
 }
 public void updatePlayer(){
   if(abs(shiftX) < 0.0000001){
