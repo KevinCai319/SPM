@@ -15,6 +15,8 @@ public int CameraState;
   boolean Keyspace = false;
   boolean KeyQ = false;
   boolean KeyE = false;
+  
+boolean isCutscene = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
 ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
