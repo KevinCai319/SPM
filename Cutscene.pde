@@ -3,8 +3,11 @@ public class Cutscene{
   public float timeLeft;
   private float Duration;
   private int frames;
-  PImage[] images;
+  ArrayList<PImage> images = new ArrayList<PImage>();
   public Cutscene(int ID,float Duration){
-    
+    images.add(loadImage("/Cutscenes/"+ ID + "/.PNG"));
+  }
+  public void RenderImg(int index){
+  
   }
 }

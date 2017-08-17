@@ -46,7 +46,7 @@ public void render(int scale){
       IsTint = true;
     }
     }
-    
+    IsRender = true;
   if (IsRender){
   IsIntersecting();
  if(IsTint){
@@ -114,8 +114,6 @@ mz = ml.get(0)[2];
 tx = ml.get(1)[1];
 tz = ml.get(1)[2];
 IsTint = false;
-//println(m.get(0)[0]+"/"+player.shiftZ);
-//println(j.get(0)+"/"+j.get(1)+"/"+BID+"/" +  player.slope);
 beginShape(QUADS); 
 texture(m);
 vertex(ml.get(0)[1],y+scale,ml.get(0)[2],0,0);
@@ -135,7 +133,7 @@ endShape();
     }
     C2Dplane.add( new flatObj(mx, y-scale, tx, y+scale,BID));
 }else{
-IsTint = true;
+//IsTint = true;
 }
 }
 public Float[] compareIntersection(PVector A, PVector B){

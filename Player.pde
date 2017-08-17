@@ -192,7 +192,7 @@ if(abs(shiftZ) < 0.0000001){
   }
 }
 public void UpdateInputs(){
-  if (KeyUp&&isJumping == false){
+  if (KeyUp&&isJumping == false && isColliding){
     isJumping = true;
     ly = y;
     lx = FXpos;
