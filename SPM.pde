@@ -43,7 +43,7 @@ void setup(){
 player = new Player(100,4,2);
 IBlock.clear();
 size(1200, 900, P3D);
-surface.setResizable(true);
+surface.setResizable(false);
 minim = new Minim(this);
 //GameAudio.play("pink floyd","A");
 GameAudio.play("credits","A");
@@ -60,24 +60,26 @@ foucusZ = player.z;
 postfoucusX = player.x;
 postfoucusY = player.y;
 postfoucusZ = player.z;
+
 }
 void draw(){
 frames++;
 C2Dplane.clear();
+background(0);
 renderFrame();
 rotationTransition();
 player.updatePlayer();
+render2D();
 }
 void renderFrame(){
 if(IsLoaded == false){
   load();
 }else{
 beginCamera();
-background(0);
 noStroke();
 lights();
 editCam(0);
-camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
+camera(postfoucusX,player.y- scale*15,postfoucusZ,foucusX,player.y,foucusZ,0,1,0);
 ortho(-width/4, width/4, -height/4, height/4);
 Renderscene();
 endCamera();
@@ -132,14 +134,13 @@ void lol (int levelID){
 void rotationTransition(){
 if(IsRotating == true){
   if(KeyE){
-ang++;
+    ang++;
   }
-    if(KeyQ){
-ang--;
+  if(KeyQ){
+    ang--;
   }
 }else{
 IsRotating = false;
-RotationState %= 4;
 }
  UpdateAngle();
 }
@@ -216,4 +217,6 @@ void keyReleased(){
 }
 void changeAppTitle(String title) {
   surface.setTitle(title);
+}
+public void render2D(){
 }
