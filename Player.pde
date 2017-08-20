@@ -30,10 +30,9 @@ public Player(int health,int speed, float Damage){
   this.Damage = Damage;
   isJumping = false;
   x = width/2;
-  y = height/2- pheight*1.618;
+  y = height/2- pheight*1.618-5;
   z = 0;
   pwidth = scale;
-  height = int(scale*1.618);
   mCube = new cube(0,int(x),int(y),int(z));
   shiftX = 1;
 }
@@ -88,7 +87,7 @@ public void CheckCollision(AABBHitbox HitBox){
 public void respawn(){
     isJumping = false;
   x = width/2;
-  y = height/2- pheight*1.618;
+  y = height/2- pheight*1.618 -5;
   z = 0;
   Yvel = 0;
 }
@@ -109,10 +108,13 @@ if(abs(shiftZ) < 0.0000001){
     CheckCollision(HitBox);
   if(Rint&!Lint){
     int i = 0;
-    println("k");
-    if (FXvel > 0){
+    println("r");
+    if (FXvel >= 0){
+      if(FXvel == 0){
+         subFX(-1);
+      }
+      subFX(-FXvel);
     FXvel =0;
-    subFX(-5);
     }
   /*while(Rint){
     CheckCollision(HitBox);
@@ -125,9 +127,12 @@ if(abs(shiftZ) < 0.0000001){
   if(Lint&!Rint){
     int i = 0;
     println("l");
-    if (FXvel < 0){
+    if (FXvel <= 0){
+      if(FXvel == 0){
+         subFX(1);
+      }
+    subFX(-FXvel);
     FXvel =0;
-    subFX(5);
     }
   /*while(Rint){
     CheckCollision(HitBox);
@@ -150,7 +155,7 @@ if(abs(shiftZ) < 0.0000001){
     CheckCollision(HitBox);
     //println(C2Dplane.size());
     if(isColliding){
-      if(Yvel >= 0.3){
+      if(Yvel >= 0.3 ){
     isJumping = false;
     int i =0;
     while(isColliding){
@@ -226,11 +231,10 @@ public void UpdateInputs(){
     }
   }    
   y+=Yvel;
-  
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
   FXpos+=FXvel;
-  mCube.x = int(x);
+    mCube.x = int(x);
   mCube.y = int(y);
   mCube.z = int(z);
   Lbox.center.y = y;
