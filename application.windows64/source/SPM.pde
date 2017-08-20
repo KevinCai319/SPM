@@ -13,13 +13,17 @@ public int CameraState;
   boolean KeyLeft = false;
   boolean KeyDown = false;
   boolean Keyspace = false;
+  boolean KeyQ = false;
+  boolean KeyE = false;
+  
+boolean isCutscene = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
 ArrayList<cube>IBlock = new ArrayList<cube>();
 ArrayList<flatObj> C2Dplane = new ArrayList<flatObj>();
 String[] Levelreader;
 Minim minim;
 AudioPlayer audio;
-float ang = 90;
+float ang = 0;
 int frames;
 boolean IsLoaded = false;
 float eyeX,eyeY,eyeZ;
@@ -42,13 +46,13 @@ size(1200, 900, P3D);
 surface.setResizable(true);
 minim = new Minim(this);
 //GameAudio.play("pink floyd","A");
-//GameAudio.play("pink floyed","A");
+GameAudio.play("credits","A");
 changeAppTitle("SPM");
 titlebaricon = new ImageIcon(loadBytes("favicon.ico"));
 eyeX = width/2;
 textureMode(NORMAL);
 eyeY = height/2- scale*15;
-
+player.generateHitbox();
 eyeZ = d;
 foucusX = player.x;
 foucusY = player.y;
@@ -59,6 +63,7 @@ postfoucusZ = player.z;
 }
 void draw(){
 frames++;
+C2Dplane.clear();
 renderFrame();
 rotationTransition();
 player.updatePlayer();
@@ -87,12 +92,13 @@ public void load(){
   load.StartLoad(10,10,10);
   frame.setIconImage(titlebaricon.getImage());
   }else{
-  for(int i = 0; i < 200 && IsLoaded == false; i++){
+  for(int i = 0; i < 100 && IsLoaded == false; i++){
     if(!(load.cx > load.x && load.cz > load.x)){
         load.LoadUpdate();
     }
   }
   //println(load.z);
+  
   }
 }
 public void editCam(float fraction){
@@ -107,12 +113,11 @@ public void editCam(float fraction){
  
 }
 public void Renderscene(){
-  C2Dplane.clear();
 for (int i = 0; i < IBlock.size() ; i++){
 IBlock.get(i).render(scale);
 }
 //println(player.x);
-player.mCube.render(scale/2);
+player.mCube.Prender(player.pwidth);
 }
 public AudioPlayer getSound(String m){
   audio = minim.loadFile(m);
@@ -125,8 +130,13 @@ void lol (int levelID){
     }
   }
 void rotationTransition(){
-if(IsRotating == true && Keyspace == true){
-ang+=1;
+if(IsRotating == true){
+  if(KeyE){
+ang++;
+  }
+    if(KeyQ){
+ang--;
+  }
 }else{
 IsRotating = false;
 RotationState %= 4;
@@ -141,56 +151,67 @@ void UpdateAngle() {
   eyeZ = (foucusZ)+d*cos(radians(ang));
 }
 void keyPressed(){
-   if(key == CODED)
-  {
-    if (keyCode == LEFT)
+    if (key == 'a')
     {
       KeyLeft = true;
     }
-    if(keyCode == RIGHT)
+    if(key == 'd')
     {
       KeyRight = true; 
     }
-    if (keyCode == UP)
+    if (key == 'w')
     {
       KeyUp = true;
     }
-    if(keyCode == DOWN)
+    if(key == 's')
     {
       KeyDown = true;
     }
     
-  }
   if (keyCode == ' ' && IsRotating == false){
     Keyspace = true;
+  }
+    if (key == 'e'){
+    KeyE = true;
     IsRotating = true;
-    ang+=2;
+  }
+    if (key == 'q'){
+    KeyQ = true;
+    IsRotating = true;
   }
 }
 void keyReleased(){
-   if(key == CODED)
-  {
-    if (keyCode == LEFT)
+    if (key == 'a')
     {
       KeyLeft = false;
     }
-    if(keyCode == RIGHT)
+    if(key == 'd')
     {
       KeyRight = false; 
     }
-    if (keyCode == UP)
+    if (key == 'w')
     {
       KeyUp = false;
     }
-    if(keyCode == DOWN)
+    if(key == 's')
     {
       KeyDown = false;
     }
     
-  }
-  if (keyCode == ' '){
-    Keyspace = false;
+  if (key == 'e'){
+    KeyE = false;
+    if(!KeyQ){
     IsRotating = false;
+    }
+  }
+    if (key == 'q'){
+    KeyQ = false;
+    if(!KeyE){
+    IsRotating = false;
+    }
+  }
+ if (keyCode == ' ' && IsRotating == false){
+    Keyspace = false;
   }
 }
 void changeAppTitle(String title) {

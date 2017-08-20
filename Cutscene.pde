@@ -5,7 +5,9 @@ public class Cutscene{
   private int frames;
   ArrayList<PImage> images = new ArrayList<PImage>();
   public Cutscene(int ID,float Duration){
-    images.add(loadImage("/Cutscenes/"+ ID + "/.PNG"));
+    
+  }
+  public void OpenData(int ID){
   }
   public void RenderImg(int index){
   

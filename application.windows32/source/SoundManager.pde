@@ -10,6 +10,7 @@ ArrayList<Soundfx> ESounds = new ArrayList<Soundfx>();
   public SoundManager(){
      AMBsounds.add("pink floyd");
      AMBsounds.add("pink floyed");
+     AMBsounds.add("credits");
   }
   
   
