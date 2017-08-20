@@ -67,7 +67,7 @@ public void setup(){
 player = new Player(100,4,2);
 IBlock.clear();
 
-surface.setResizable(true);
+surface.setResizable(false);
 minim = new Minim(this);
 //GameAudio.play("pink floyd","A");
 GameAudio.play("credits","A");
@@ -84,24 +84,26 @@ foucusZ = player.z;
 postfoucusX = player.x;
 postfoucusY = player.y;
 postfoucusZ = player.z;
+
 }
 public void draw(){
 frames++;
 C2Dplane.clear();
+background(0);
 renderFrame();
 rotationTransition();
 player.updatePlayer();
+render2D();
 }
 public void renderFrame(){
 if(IsLoaded == false){
   load();
 }else{
 beginCamera();
-background(0);
 noStroke();
 lights();
 editCam(0);
-camera(postfoucusX,postfoucusY,postfoucusZ,foucusX,foucusY,foucusZ,0,1,0);
+camera(postfoucusX,player.y- scale*15,postfoucusZ,foucusX,player.y,foucusZ,0,1,0);
 ortho(-width/4, width/4, -height/4, height/4);
 Renderscene();
 endCamera();
@@ -156,14 +158,13 @@ public void lol (int levelID){
 public void rotationTransition(){
 if(IsRotating == true){
   if(KeyE){
-ang++;
+    ang++;
   }
-    if(KeyQ){
-ang--;
+  if(KeyQ){
+    ang--;
   }
 }else{
 IsRotating = false;
-RotationState %= 4;
 }
  UpdateAngle();
 }
@@ -240,6 +241,8 @@ public void keyReleased(){
 }
 public void changeAppTitle(String title) {
   surface.setTitle(title);
+}
+public void render2D(){
 }
 public class AABBHitbox{
 public PVector center;
@@ -329,7 +332,6 @@ public void render(int scale){
       IsTint = true;
     }
     }
-    IsRender = true;
   if (IsRender){
   IsIntersecting();
  if(IsTint){
@@ -352,6 +354,12 @@ public void render(int scale){
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
+  
+  /*vertex(-scale+x, scale+y, -scale+z, 0, 0);
+  vertex( scale+x, scale+y, -scale+z, 1, 0);
+  vertex( scale+x, scale+y,  scale+z, 1, 1);
+  vertex(-scale+x, scale+y,  scale+z, 0, 1);
+  */
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
@@ -397,13 +405,13 @@ mz = ml.get(0)[2];
 tx = ml.get(1)[1];
 tz = ml.get(1)[2];
 IsTint = false;
-beginShape(QUADS); 
+/*beginShape(QUADS); 
 texture(m);
 vertex(ml.get(0)[1],y+scale,ml.get(0)[2],0,0);
 vertex(ml.get(0)[1],y-scale,ml.get(0)[2],0,1);
 vertex(ml.get(1)[1],y-scale,ml.get(1)[2],1,1);
 vertex(ml.get(1)[1],y+scale,ml.get(1)[2],1,0);
-endShape();
+endShape();*/
     if( GetDist(mx,mz,player.x,player.z) < GetDist(mx,mz,player.x+player.shiftX,player.z+player.shiftZ)){
       mx = -GetDist(mx,mz,player.x,player.z);
     }else{
@@ -494,14 +502,58 @@ public class Cutscene{
   public int cutsceneID;
   public float timeLeft;
   private float Duration;
-  private int frames;
+  private String[] k;
+  private int Cframes = 0;
+  private int Cimage = 0;
+  private int StartingFrame = 0;
+  private ArrayList<Integer> xcoords = new ArrayList<Integer>();
+  private ArrayList<Integer> ycoords = new ArrayList<Integer>();
+  private ArrayList<Integer> time = new ArrayList<Integer>();
   ArrayList<PImage> images = new ArrayList<PImage>();
+  ArrayList<PImage> loadedImages = new ArrayList<PImage>();
   public Cutscene(int ID,float Duration){
-    
+      cutsceneID = ID;
+    this.Duration = Duration;
+    k = loadStrings("/Cutscenes/"+ ID + "/data.txt");
+    loadData(k);
+    StartingFrame = frames;
   }
-  public void OpenData(int ID){
+  public void checkUpdate(){
+    if(Cimage <= xcoords.size()){
+      if(frames-Cframes >= time.get(Cimage)*Duration){
+        Cframes = frames;
+        Cimage++;
+      }
+      if(Cimage <= xcoords.size() && !loadedImages.contains(images.get(Cimage))){
+      loadedImages.add(images.get(Cimage));
+      }
+      for(int i = 0 ; i <= loadedImages.size(); i++){
+        RenderImg(xcoords.get(i), ycoords.get(i),((frames-Cframes)-SumBefore(i))/255,loadedImages.get(i));
+      }
+      
+    }
+      
   }
-  public void RenderImg(int index){
+  public int SumBefore(int i){
+    int sum = 0;
+  for(int k = 0; k <= i; k++){
+    sum += time.get(k);
+  }
+  return sum;
+  }
+  public void loadData(String[] m){
+    int i = 0;
+    for(i = 0; i< m.length;i++){
+      switch(i%4){
+        case 0:images.add(loadImage("/Cutscenes/"+ cutsceneID + "/"+k[i]+".png"));
+        case 1:xcoords.add(Integer.parseInt(k[i]));
+        case 2:ycoords.add(Integer.parseInt(k[i]));
+        case 3:time.add(Integer.parseInt(k[i]));
+        default:break;
+      }
+    }
+  }
+  public void RenderImg(float x, float y,float transparency,PImage image){
   
   }
 }
@@ -598,10 +650,9 @@ public Player(int health,int speed, float Damage){
   this.Damage = Damage;
   isJumping = false;
   x = width/2;
-  y = height/2- pheight*1.618f;
+  y = height/2- pheight*1.618f-5;
   z = 0;
   pwidth = scale;
-  height = PApplet.parseInt(scale*1.618f);
   mCube = new cube(0,PApplet.parseInt(x),PApplet.parseInt(y),PApplet.parseInt(z));
   shiftX = 1;
 }
@@ -656,7 +707,7 @@ public void CheckCollision(AABBHitbox HitBox){
 public void respawn(){
     isJumping = false;
   x = width/2;
-  y = height/2- pheight*1.618f;
+  y = height/2- pheight*1.618f -5;
   z = 0;
   Yvel = 0;
 }
@@ -677,10 +728,13 @@ if(abs(shiftZ) < 0.0000001f){
     CheckCollision(HitBox);
   if(Rint&!Lint){
     int i = 0;
-    println("k");
-    if (FXvel > 0){
+    println("r");
+    if (FXvel >= 0){
+      if(FXvel == 0){
+         subFX(-1);
+      }
+      subFX(-FXvel);
     FXvel =0;
-    subFX(-5);
     }
   /*while(Rint){
     CheckCollision(HitBox);
@@ -693,9 +747,12 @@ if(abs(shiftZ) < 0.0000001f){
   if(Lint&!Rint){
     int i = 0;
     println("l");
-    if (FXvel < 0){
+    if (FXvel <= 0){
+      if(FXvel == 0){
+         subFX(1);
+      }
+    subFX(-FXvel);
     FXvel =0;
-    subFX(5);
     }
   /*while(Rint){
     CheckCollision(HitBox);
@@ -718,7 +775,7 @@ if(abs(shiftZ) < 0.0000001f){
     CheckCollision(HitBox);
     //println(C2Dplane.size());
     if(isColliding){
-      if(Yvel >= 0.3f){
+      if(Yvel >= 0.3f ){
     isJumping = false;
     int i =0;
     while(isColliding){
@@ -794,11 +851,10 @@ public void UpdateInputs(){
     }
   }    
   y+=Yvel;
-  
   x+=shiftX*FXvel;
   z+=shiftZ*FXvel;
   FXpos+=FXvel;
-  mCube.x = PApplet.parseInt(x);
+    mCube.x = PApplet.parseInt(x);
   mCube.y = PApplet.parseInt(y);
   mCube.z = PApplet.parseInt(z);
   Lbox.center.y = y;

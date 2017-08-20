@@ -46,7 +46,6 @@ public void render(int scale){
       IsTint = true;
     }
     }
-    IsRender = true;
   if (IsRender){
   IsIntersecting();
  if(IsTint){
@@ -69,6 +68,12 @@ public void render(int scale){
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
+  
+  /*vertex(-scale+x, scale+y, -scale+z, 0, 0);
+  vertex( scale+x, scale+y, -scale+z, 1, 0);
+  vertex( scale+x, scale+y,  scale+z, 1, 1);
+  vertex(-scale+x, scale+y,  scale+z, 0, 1);
+  */
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);
@@ -114,13 +119,13 @@ mz = ml.get(0)[2];
 tx = ml.get(1)[1];
 tz = ml.get(1)[2];
 IsTint = false;
-beginShape(QUADS); 
+/*beginShape(QUADS); 
 texture(m);
 vertex(ml.get(0)[1],y+scale,ml.get(0)[2],0,0);
 vertex(ml.get(0)[1],y-scale,ml.get(0)[2],0,1);
 vertex(ml.get(1)[1],y-scale,ml.get(1)[2],1,1);
 vertex(ml.get(1)[1],y+scale,ml.get(1)[2],1,0);
-endShape();
+endShape();*/
     if( GetDist(mx,mz,player.x,player.z) < GetDist(mx,mz,player.x+player.shiftX,player.z+player.shiftZ)){
       mx = -GetDist(mx,mz,player.x,player.z);
     }else{
