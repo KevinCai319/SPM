@@ -28,6 +28,10 @@ if(cz<= x || cx<=x){
 IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2),scale*cz*2));
 IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*2,scale*cz*2));
 IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*4,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*6,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*8,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*10,scale*cz*2));
+IBlock.add(new cube(1,(width/2)+scale*2*cx,(height/2)-scale*12,scale*cz*2));
   }else{
     if (cx > 2){
   IBlock.add(new cube(2,(width/2)+scale*2*cx,(height/2),scale*cz*2));

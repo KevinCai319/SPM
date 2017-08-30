@@ -2,6 +2,7 @@ public class cube{
 PImage m;
 int x;
 int y;
+int z;
 float mx = 0;
 float mz = 0;
 float tx = 0;
@@ -11,7 +12,6 @@ boolean IsRender = true;
 boolean IsTint = false;
 int ID;
 int BID;
-int z;
 int dist = scale*2;
 public cube(int BlockID,int x, int y, int z){
 ID = BlockID;
@@ -29,7 +29,7 @@ BID = LoadedBlocks.size();
 public void Prender(int pwidth){
   beginShape(QUADS);
   texture(m);
-    vertex(player.x+player.shiftX*pwidth, player.y+player.pheight, player.z+player.shiftZ*20, 0, 1);
+  vertex(player.x+player.shiftX*pwidth, player.y+player.pheight, player.z+player.shiftZ*20, 0, 1);
   vertex(player.x+player.shiftX*pwidth, player.y-player.pheight,  player.z+player.shiftZ*20, 0, 0);
   vertex(player.x-player.shiftX*pwidth,  player.y-player.pheight, player.z-player.shiftZ*20, 1, 0);
   vertex(player.x-player.shiftX*pwidth,  player.y+player.pheight,  player.z-player.shiftZ*20, 1, 1);
@@ -69,11 +69,11 @@ public void render(int scale){
   vertex( scale+x, -scale+y,  scale+z, 1, 1);
   vertex(-scale+x, -scale+y,  scale+z, 0, 1);
   
-  /*vertex(-scale+x, scale+y, -scale+z, 0, 0);
+  vertex(-scale+x, scale+y, -scale+z, 0, 0);
   vertex( scale+x, scale+y, -scale+z, 1, 0);
   vertex( scale+x, scale+y,  scale+z, 1, 1);
   vertex(-scale+x, scale+y,  scale+z, 0, 1);
-  */
+  
   vertex( scale+x, -scale+y,  scale+z, 0, 0);
   vertex( scale+x, -scale+y, -scale+z, 1, 0);
   vertex( scale+x,  scale+y, -scale+z, 1, 1);

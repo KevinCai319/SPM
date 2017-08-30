@@ -15,6 +15,8 @@ public int CameraState;
   boolean Keyspace = false;
   boolean KeyQ = false;
   boolean KeyE = false;
+  boolean KeyR = false;
+  boolean KeyP = false;
   
 boolean isCutscene = false;
 ArrayList<ArrayList<Integer>>currentLevel = new ArrayList<ArrayList<Integer>>();
@@ -84,7 +86,14 @@ ortho(-width/4, width/4, -height/4, height/4);
 Renderscene();
 endCamera();
 player.calculateShift(ang);
+if(KeyP){
+reload();
 }
+}
+}
+public void reload(){
+  player.respawn();
+  IsLoaded = false;
 }
 public void load(){
   if(CurrentlyLoading == false){
@@ -180,6 +189,12 @@ void keyPressed(){
     KeyQ = true;
     IsRotating = true;
   }
+  if (key == 'r'){
+    KeyR = true;
+  }
+  if (key == 'p'){
+    KeyP = true;
+  }
 }
 void keyReleased(){
     if (key == 'a')
@@ -205,11 +220,17 @@ void keyReleased(){
     IsRotating = false;
     }
   }
-    if (key == 'q'){
+  if (key == 'q'){
     KeyQ = false;
     if(!KeyE){
     IsRotating = false;
     }
+  }
+    if (key == 'r'){
+    KeyR = false;
+  }
+    if (key == 'p'){
+    KeyP = false;
   }
  if (keyCode == ' ' && IsRotating == false){
     Keyspace = false;
