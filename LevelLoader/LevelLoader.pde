@@ -21,6 +21,7 @@ void draw(){
   updateMouse();
   renderCursor();
   updateAction();
+  drawBlocks();
 }
 void keyPressed(){
   if(key == ' '){
@@ -77,6 +78,8 @@ private void addObject(){
     levelData.add(new gameObject(editX,editY,editZ,selectedBlockID,orientation));
   }
 }
-public void DrawBlocks(){
-
+public void drawBlocks(){
+  for(int i = 0; i < levelIndex.size(); i++){
+    rect(200+levelIndex.get(i)[1]*editorScale, levelIndex.get(i)[2]*editorScale, editorScale, editorScale);
+  }
 }
