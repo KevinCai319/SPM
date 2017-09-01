@@ -14,6 +14,9 @@ public class gameObject{
   public gameObject(int editorX,int editorY,int editorZ,int ID,int Orientation,int isDamage,int damageDealt){
   }
   public gameObject(int editorX,int editorY,int editorZ,int ID,int Orientation){
+    this.editorX = editorX;
+    this.editorY = editorY;
+    this.editorZ = editorZ;
   }
   private void calculateRealCoords(){
   }

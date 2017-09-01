@@ -81,7 +81,9 @@ public void drawGrid(){
 }
 public void renderCursor(){
   fill(200,200,200);
-  rect(modX, modY, editorScale, editorScale);
+  if(inFrame){
+    rect(modX, modY, editorScale, editorScale);
+  }
 }
 public int roundTo(int num, int to){
   float m = to/2;
@@ -156,6 +158,20 @@ private void checkOrientation(int i){
     orientation = i;
   }
 }
+private int findBlock(int x, int y, int z){//finds the block at x,y,z
+  int m = 0;
+  if(levelData.size() > 0){
+  while( m < levelData.size()-1){
+    if(levelData.get(m).editorX == x && levelData.get(m).editorY == y && levelData.get(m).editorZ == z){
+      break;
+    }else{
+      m++;
+    }
+  }
+  }
+  println(m);
+  return m;
+}
 private boolean isTouching(int x,int y,int x1, int y1){
   boolean iTouch = false;
   if(mouseX>x && mouseX < x1 && mouseY > y && mouseY<y1){
@@ -167,6 +183,9 @@ public void drawBlocks(){
   for(int i = 0; i < levelIndex.size(); i++){
     if(levelIndex.get(i)[0] == editY){
       rect(200+levelIndex.get(i)[1]*editorScale, levelIndex.get(i)[2]*editorScale, editorScale, editorScale);
+    }
+    if(levelIndex.get(i)[0] == editY-1 && !findData(editY,editX,editZ)){
+      //show semitransparent image
     }
   }
 }
