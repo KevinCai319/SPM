@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2.3040795mm"
+   height="4.4383302mm"
+   viewBox="0 0 8.1640614 15.726367"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="4.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="0.74774477"
+     inkscape:cy="27.879652"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-262.30866,-645.83308)">
+    <g
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:22.5px;line-height:125%;font-family:Moon;-inkscape-font-specification:'Moon, Light';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text4136" />
+    <g
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:22.5px;line-height:125%;font-family:Moon;-inkscape-font-specification:'Moon, Light';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text5260">
+      <path
+         d="m 264.2215,655.70374 4.94384,-7.10816 0,7.10816 -4.94384,0 z m 4.94384,5.19653 q 0,0.27466 0.18677,0.47241 0.19776,0.18677 0.46143,0.18677 0.27466,0 0.47241,-0.18677 0.18677,-0.19775 0.18677,-0.47241 l 0,-14.40308 q 0,-0.4834 -0.46143,-0.62622 -0.46142,-0.14282 -0.73608,0.25269 l -6.84448,9.85473 q -0.21973,0.32959 -0.0439,0.68116 0.18677,0.35156 0.58228,0.35156 l 6.19628,0 0,3.88916 z"
+         style=""
+         id="path5265" />
+    </g>
+  </g>
+</svg>
