@@ -2,8 +2,8 @@
 private boolean isClicked = true;
 public final int editorScale = 20;
 public boolean keySpace = false;
-public boolean keyUP = false;
 public boolean inFrame = false;
+public int wallHeight = 1;
 public int modX;
 public int modY;
 public int editX;//0-39
@@ -23,24 +23,32 @@ void draw(){
   updateMouse();
   renderCursor();
   updateAction();
+  imageMode(CENTER);
   drawBlocks();
+  imageMode(CORNER);
   loadUI();
 }
 void keyPressed(){
   if(key == ' '){
     keySpace = true; 
   }
-  if(keyCode == RIGHT){
+  if(key == 'd'){
     selectedBlockID++;
   }
-  if(keyCode == LEFT){ 
+  if(key == 'a'){ 
     selectedBlockID = (selectedBlockID > 0)?selectedBlockID-1:selectedBlockID; 
   }
-  if(keyCode == UP){
+  if(key == 'w'){
     editY++;
   }
-  if(keyCode == DOWN){
+  if(key == 's'){
     editY = (editY>0)? editY-1:editY;
+  }
+  if(key == 'q'){
+    wallHeight = (wallHeight > 1)?wallHeight-1:wallHeight; 
+  }
+  if(key == 'e'){
+    wallHeight = (wallHeight < 9)?wallHeight+1:wallHeight; 
   }
 }
 void updateAction(){
@@ -72,6 +80,7 @@ void writeToFile(String data){
 }
 public void drawGrid(){
   strokeWeight(2);
+  stroke(0);
   for(int x =0; x <= 40 ; x++){
     line(200+x*20,0,200+x*20,height);
   }
@@ -93,27 +102,63 @@ private void loadUI(){
   shape(loadShape("blockHeight.svg"),12.5+1000,height/2-130,175,200);
   shape(loadShape("blockID.svg"),12.5,height/2-130,175,200);
   shape(loadShape("blockOri.svg"),12.5,height/8*5,175,75);
-  idPrint(selectedBlockID,0);
-  idPrint(editY,1000);
+  shape(loadShape("wallSelect.svg"),1012.5,height/8*5,175,212);
+  idPrint(selectedBlockID,0,(height/2)-50,1);
+  idPrint(editY,1000,(height/2)-50,1);
+  idPrint(wallHeight,1025,(height/8*5)+100,2);
   orientationUI(100,height/8*7,50);
 }
-private void idPrint(int i,int p){
+private void idPrint(int i,int p,int y,int size){
   String m = Integer.toString(i);
   int start = (200/(m.length()+1));
   for (int j = 0; j< m.length();j++){
     if(m.charAt(j) == '1'){
-      shape(loadShape(m.charAt(j) + ".svg"),start/4+p+(j+0.5)*start,(height/2)-50,start/2,100);
+      shape(loadShape(m.charAt(j) + ".svg"),start/8+p+(j+0.5)*start,y,start/(2*size),100/size);
     }else{
-      shape(loadShape(m.charAt(j) + ".svg"),p+(j+0.5)*start,(height/2)-50,start,100);
+      shape(loadShape(m.charAt(j) + ".svg"),p+(j+0.5)*start,y,start/size,100/size);
     }
   }
   
 }
+private void loadImages(){
+/*
+loadShape("blockHeight.svg")
+loadShape("blockID.svg")
+loadShape("blockOri.svg")
+loadShape("wallSelect.svg")
+loadShape("USL.svg")
+loadShape("USL.svg")
+loadShape("RL.svg")
+loadShape("RSL.svg")
+loadShape("DL.svg")
+loadShape("DSL.svg")
+loadShape("LL.svg")
+loadShape("LSL.svg")
+loadShape("0.svg")
+loadShape("1.svg")
+loadShape("2.svg")
+loadShape("3.svg")
+loadShape("4.svg")
+loadShape("5.svg")
+loadShape("6.svg")
+loadShape("7.svg")
+loadShape("8.svg")
+loadShape("9.svg")
+loadShape("0ori.svg")
+loadShape("1ori.svg")
+loadShape("2ori.svg")
+loadShape("3ori.svg")
+*/
+}
 private void addObject(){
   if(findData(editY,editX,editZ)){
   }else{
-    levelIndex.add(new int[] {editY,editX,editZ});
-    levelData.add(new gameObject(editX,editY,editZ,selectedBlockID,orientation));
+    for(int i = 0; i< wallHeight;i++){
+       if(!findData(editY+i,editX,editZ)){
+          levelIndex.add(new int[] {editY+i,editX,editZ});
+          levelData.add(new gameObject(editX,editY+i,editZ,selectedBlockID,orientation));
+       }
+    }
   }
 }
 public Boolean findData(int a,int b, int c){
@@ -169,7 +214,6 @@ private int findBlock(int x, int y, int z){//finds the block at x,y,z
     }
   }
   }
-  println(m);
   return m;
 }
 private boolean isTouching(int x,int y,int x1, int y1){
@@ -180,8 +224,11 @@ private boolean isTouching(int x,int y,int x1, int y1){
   return iTouch;
 }
 public void drawBlocks(){
+  int k;
   for(int i = 0; i < levelIndex.size(); i++){
     if(levelIndex.get(i)[0] == editY){
+      k = findBlock(levelIndex.get(i)[1],levelIndex.get(i)[0],levelIndex.get(i)[2]);
+      fill(0+levelData.get(k).Orientation*50);
       rect(200+levelIndex.get(i)[1]*editorScale, levelIndex.get(i)[2]*editorScale, editorScale, editorScale);
     }
     if(levelIndex.get(i)[0] == editY-1 && !findData(editY,editX,editZ)){

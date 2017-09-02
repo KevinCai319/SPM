@@ -17,6 +17,7 @@ public class gameObject{
     this.editorX = editorX;
     this.editorY = editorY;
     this.editorZ = editorZ;
+    this.Orientation = Orientation;
   }
   private void calculateRealCoords(){
   }
