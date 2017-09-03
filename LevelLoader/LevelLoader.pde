@@ -1,9 +1,7 @@
 
 private boolean isClicked = true;
 public final int editorScale = 20;
-public boolean keySpace = false;
 public boolean inFrame = false;
-public int wallHeight = 1;
 public int modX;
 public int modY;
 public int editX;//0-39
@@ -11,26 +9,33 @@ public int editY = 0;//0-1000
 public int editZ;//0-39
 private int selectedBlockID = 0;
 private int orientation = 0;
+private int wallHeight = 1;
+private int snapGrid = 0;
+private boolean eraseMode = false;
+private ArrayList<PShape> Images = new ArrayList<PShape>();
 public ArrayList<gameObject>levelData = new ArrayList<gameObject>();
 public ArrayList<int[]>levelIndex = new ArrayList<int[]>();//lists of lists that each contain data for 1 object
+PrintWriter output;
 void setup(){
   size(1200,800, P2D);//editorScale*40 is side width of level area, which would be a maximum of 40 by 40 lbocks,plus the extra 200px of space on both sides for UI
   surface.setResizable(false);
+  output = createWriter("data.txt");
+  loadImages();
 }
 void draw(){
   background(255,255,255);
   drawGrid();
   updateMouse();
-  renderCursor();
   updateAction();
   imageMode(CENTER);
   drawBlocks();
   imageMode(CORNER);
   loadUI();
+  renderCursor();
 }
 void keyPressed(){
   if(key == ' '){
-    keySpace = true; 
+    eraseMode = !eraseMode;
   }
   if(key == 'd'){
     selectedBlockID++;
@@ -50,33 +55,44 @@ void keyPressed(){
   if(key == 'e'){
     wallHeight = (wallHeight < 9)?wallHeight+1:wallHeight; 
   }
+  if(key == 'c'){
+    snapGrid++;
+    snapGrid %= 3;
+  }
+  if(key ==  'v'){
+    if(snapGrid > 0){
+      snapGrid--;
+    }else{
+      snapGrid = 2;
+    }
+    snapGrid %= 3;
+  }
 }
 void updateAction(){
   if(isClicked && inFrame){
     addObject();
   }
 }
-void keyReleased(){
-  if(key == ' '){
-    keySpace = false; 
-  }
-}
 void updateMouse(){
    isClicked = mousePressed;
    if(abs(mouseX-600) < 400){
-     modX = roundTo(mouseX-editorScale/2, editorScale);
-     modY = roundTo(mouseY-editorScale/2, editorScale);
+     if(snapGrid!= 2){
+       modX = roundTo(mouseX-editorScale/2, editorScale);
+     }
+     if(snapGrid!= 1){
+       modY = roundTo(mouseY-editorScale/2, editorScale);
+     }
      inFrame = true;
    }else{
-     modX = 600;
-     modY = 400;
      inFrame = false;
    }
    editX = round((modX-200)/editorScale);
    editZ = round((modY/editorScale));
 }
-void writeToFile(String data){
-
+void writeToFile(){
+  output.flush();
+  output.close();
+  exit();
 }
 public void drawGrid(){
   strokeWeight(2);
@@ -91,7 +107,7 @@ public void drawGrid(){
 public void renderCursor(){
   fill(200,200,200);
   if(inFrame){
-    rect(modX, modY, editorScale, editorScale);
+    rect(modX+editorScale/4, modY+editorScale/4, editorScale/2, editorScale/2);
   }
 }
 public int roundTo(int num, int to){
@@ -99,13 +115,29 @@ public int roundTo(int num, int to){
   return round(num+m - (num+m)%to);
 }
 private void loadUI(){
-  shape(loadShape("blockHeight.svg"),12.5+1000,height/2-130,175,200);
-  shape(loadShape("blockID.svg"),12.5,height/2-130,175,200);
-  shape(loadShape("blockOri.svg"),12.5,height/8*5,175,75);
-  shape(loadShape("wallSelect.svg"),1012.5,height/8*5,175,212);
+  shape(Images.get(0),12.5+1000,height/2-130,175,200);
+  shape(Images.get(1),12.5,height/2-130,175,200);
+  shape(Images.get(2),12.5,height/8*5,175,75);
+  shape(Images.get(3),1012.5,height/8*4.75,175,212);
+  shape(Images.get(26),1012.5,height/10*8.75,175,100);
+  if(snapGrid == 0){
+    shape(Images.get(29),1077.5,height/10*8.75+50,45,45);
+  }else{
+    if(snapGrid == 1){
+      shape(Images.get(27),1077.5,height/10*8.75+50,45,45);
+    }else{
+      shape(Images.get(28),1077.5,height/10*8.75+50,45,45);
+    }
+  }
+  if(eraseMode){
+     shape(Images.get(30),1012.5,height/10*1.75,175,100);
+  }else{
+     shape(Images.get(31),1012.5,height/10*1.75,175,100);
+  }
   idPrint(selectedBlockID,0,(height/2)-50,1);
   idPrint(editY,1000,(height/2)-50,1);
-  idPrint(wallHeight,1025,(height/8*5)+100,2);
+  idPrint(wallHeight,1025,int(height/8*4.75)+100,2);
+  
   orientationUI(100,height/8*7,50);
 }
 private void idPrint(int i,int p,int y,int size){
@@ -113,45 +145,63 @@ private void idPrint(int i,int p,int y,int size){
   int start = (200/(m.length()+1));
   for (int j = 0; j< m.length();j++){
     if(m.charAt(j) == '1'){
-      shape(loadShape(m.charAt(j) + ".svg"),start/8+p+(j+0.5)*start,y,start/(2*size),100/size);
+      shape(Images.get(13),start/8+p+(j+0.5)*start,y,start/(2*size),100/size);
     }else{
-      shape(loadShape(m.charAt(j) + ".svg"),p+(j+0.5)*start,y,start/size,100/size);
+      shape(Images.get(12+(m.charAt(j)- '0')),p+(j+0.5)*start,y,start/size,100/size);
     }
   }
   
 }
 private void loadImages(){
-/*
-loadShape("blockHeight.svg")
-loadShape("blockID.svg")
-loadShape("blockOri.svg")
-loadShape("wallSelect.svg")
-loadShape("USL.svg")
-loadShape("USL.svg")
-loadShape("RL.svg")
-loadShape("RSL.svg")
-loadShape("DL.svg")
-loadShape("DSL.svg")
-loadShape("LL.svg")
-loadShape("LSL.svg")
-loadShape("0.svg")
-loadShape("1.svg")
-loadShape("2.svg")
-loadShape("3.svg")
-loadShape("4.svg")
-loadShape("5.svg")
-loadShape("6.svg")
-loadShape("7.svg")
-loadShape("8.svg")
-loadShape("9.svg")
-loadShape("0ori.svg")
-loadShape("1ori.svg")
-loadShape("2ori.svg")
-loadShape("3ori.svg")
-*/
+//subtract 1
+Images.add(loadShape("blockHeight.svg"));//1
+Images.add(loadShape("blockID.svg"));//2
+Images.add(loadShape("blockOri.svg"));//3
+Images.add(loadShape("wallSelect.svg"));//4
+Images.add(loadShape("USL.svg"));//5
+Images.add(loadShape("UL.svg"));//6
+Images.add(loadShape("RL.svg"));//7
+Images.add(loadShape("RSL.svg"));//8
+Images.add(loadShape("DL.svg"));//9
+Images.add(loadShape("DSL.svg"));//10
+Images.add(loadShape("LL.svg"));//11
+Images.add(loadShape("LSL.svg"));//12
+Images.add(loadShape("0.svg"));//13
+Images.add(loadShape("1.svg"));//14
+Images.add(loadShape("2.svg"));//15
+Images.add(loadShape("3.svg"));//16
+Images.add(loadShape("4.svg"));//17
+Images.add(loadShape("5.svg"));//18
+Images.add(loadShape("6.svg"));//19
+Images.add(loadShape("7.svg"));//20
+Images.add(loadShape("8.svg"));//21
+Images.add(loadShape("9.svg"));//22
+Images.add(loadShape("0ori.svg"));//23
+Images.add(loadShape("1ori.svg"));//24
+Images.add(loadShape("2ori.svg"));//25
+Images.add(loadShape("3ori.svg"));//26
+Images.add(loadShape("snapGridUI.svg"));//27
+Images.add(loadShape("snapGridX.svg"));//28
+Images.add(loadShape("snapGridY.svg"));//29
+Images.add(loadShape("snapGridOFF.svg"));//30
+Images.add(loadShape("eraseON.svg"));//31
+Images.add(loadShape("eraseOFF.svg"));//32
 }
 private void addObject(){
+  if(eraseMode){
+    println("k");
+      for(int i = 0; i< wallHeight;i++){
+        if(findData(editY+i,editX,editZ)){
+          levelData.remove(findBlock(editX,editY+i,editZ));
+          levelIndex.remove(findDataIndex(editY+i,editX,editZ));
+        }
+          levelIndex.add(new int[] {editY+i,editX,editZ});
+          levelData.add(new gameObject(editX,editY+i,editZ,selectedBlockID,orientation));
+      }
+  }else{
+    println("t");
   if(findData(editY,editX,editZ)){
+    
   }else{
     for(int i = 0; i< wallHeight;i++){
        if(!findData(editY+i,editX,editZ)){
@@ -160,6 +210,7 @@ private void addObject(){
        }
     }
   }
+ }
 }
 public Boolean findData(int a,int b, int c){
   boolean result = false;
@@ -170,33 +221,43 @@ public Boolean findData(int a,int b, int c){
   }
   return result;
 }
+public int findDataIndex(int a,int b, int c){
+  boolean result = false;
+  int m =0;
+  for(int i =0; i < levelIndex.size(); i++){
+    if(levelIndex.get(i)[0] == a &&levelIndex.get(i)[1] == b && levelIndex.get(i)[2] == c ){
+      m = i;
+    }
+  }
+  return m;
+}
 private void orientationUI(int x, int y,int scale){
   boolean[] k = {isTouching(x-scale,y-scale*2,x+scale,y-scale),isTouching(x+scale,y-scale,x+scale*2,y+scale),isTouching(x-scale,y+scale,x+scale,y+scale*2),isTouching(x-scale*2,y-scale,x-scale,y+scale)};//top,right,bottom, left
   if(k[0]){
-    shape(loadShape("USL.svg"),x-scale,y-scale*2,2*scale,scale);
+    shape(Images.get(4),x-scale,y-scale*2,2*scale,scale);
     checkOrientation(0);
   }else{
-    shape(loadShape("UL.svg"),x-scale,y-scale*2,2*scale,scale);
+    shape(Images.get(5),x-scale,y-scale*2,2*scale,scale);
   }
   if(k[1]){
-    shape(loadShape("RSL.svg"),x+scale,y-scale,scale,2*scale);
+    shape(Images.get(7),x+scale,y-scale,scale,2*scale);
     checkOrientation(1);
   }else{
-    shape(loadShape("RL.svg"),x+scale,y-scale,scale,2*scale);
+    shape(Images.get(6),x+scale,y-scale,scale,2*scale);
   }
   if(k[2]){
-    shape(loadShape("DSL.svg"),x-scale,y+scale,2*scale,scale);
+    shape(Images.get(9),x-scale,y+scale,2*scale,scale);
     checkOrientation(2);
   }else{
-    shape(loadShape("DL.svg"),x-scale,y+scale,2*scale,scale);
+    shape(Images.get(8),x-scale,y+scale,2*scale,scale);
   }
   if(k[3]){
-    shape(loadShape("LSL.svg"),x-scale*2,y-scale,scale,2*scale);
+    shape(Images.get(11),x-scale*2,y-scale,scale,2*scale);
     checkOrientation(3);
   }else{
-    shape(loadShape("LL.svg"),x-scale*2,y-scale,scale,2*scale);
+    shape(Images.get(10),x-scale*2,y-scale,scale,2*scale);
   }
-  shape(loadShape(orientation+"ori.svg"),x-scale,y-scale,scale*2,scale*2);
+  shape(Images.get(orientation+22),x-scale,y-scale,scale*2,scale*2);
 }
 private void checkOrientation(int i){
   if(isClicked == true){
