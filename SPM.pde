@@ -137,9 +137,13 @@ public AudioPlayer getSound(String m){
 void lol (int levelID){
     String[]Levelreader = loadStrings(levelID +"LDATA"+".txt");
     for (int i = 0; i < Levelreader.length ; i++ ){
-    
+      IBlock.add(new cube(determineValue(Levelreader[i], 0),determineValue(Levelreader[i], 1),determineValue(Levelreader[i], 2),determineValue(Levelreader[i], 3)));
     }
-  }
+}
+Integer determineValue(String item,int value){
+  
+  return 0xA;
+}
 void rotationTransition(){
 if(IsRotating == true){
   if(KeyE){
